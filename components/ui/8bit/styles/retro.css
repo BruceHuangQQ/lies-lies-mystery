@@ -1,0 +1,11 @@
+/* Press Start 2P is loaded via next/font in app/layout.tsx */
+
+.retro {
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}

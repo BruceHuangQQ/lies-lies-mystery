@@ -1,22 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Fira_Code } from "next/font/google";
+import { Press_Start_2P } from "next/font/google";
 
+import "@/components/ui/8bit/styles/retro.css";
 import "./globals.css";
 
-const fontSans = DM_Sans({
+const font8bit = Press_Start_2P({
+  weight: "400",
   subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const fontMono = Fira_Code({
-  subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-8bit",
 });
 
 export const metadata: Metadata = {
   title: {
     default: "Lies, Lies, Mystery",
-    template: "Lies, Lies, Mystery",
+    template: "%s · Lies, Lies, Mystery",
   },
   description:
     "A web mystery about language, trust, and what you choose to believe.",
@@ -37,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontSans.variable} ${fontMono.variable} flex min-h-screen flex-col font-sans antialiased`}
+        className={`${font8bit.variable} flex min-h-screen flex-col font-sans`}
         suppressHydrationWarning
       >
         <div className="flex flex-1 flex-col">{children}</div>
