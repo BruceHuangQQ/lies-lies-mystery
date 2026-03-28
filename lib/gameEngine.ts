@@ -1,48 +1,52 @@
 import gameData from "@/data/game-data.json";
 
 type Suspect = {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 };
 
 type Personality = {
-  id: number;
-  personality: string;
+    id: number;
+    personality: string;
 };
 
 type Relationship = {
-  id: number;
-  relationship: string;
-  description: string;
+    id: number;
+    relationship: string;
+    description: string;
 };
 
 type Weapon = {
-  id: number;
-  name: string;
-  description: string;
+    id: number;
+    name: string;
+    description: string;
 };
 
 type Location = {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 };
 
 type Motive = {
-  id: number;
-  description: string;
+    id: number;
+    description: string;
 };
 
 type CaseData = {
-  suspects: Array<{
-    suspect: Suspect;
-    personality: Personality;
-    relationship: Relationship;
-  }>;
-  weapon: Weapon;
-  location: Location;
-  motive: Motive;
+    suspects: Array<{
+        suspect: Suspect;
+        personality: Personality;
+        relationship: Relationship;
+    }>;
+    weapon: Weapon;
+    location: Location;
+    motive: Motive;
 };
 
 export class GameEngine {
-  private data = gameData;
+    private data = gameData;
+
+    private getRandomItem<T>(items: T[]): T {
+        return items[Math.floor(Math.random() * items.length)];
+    }
 }
