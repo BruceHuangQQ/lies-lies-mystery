@@ -79,4 +79,12 @@ export class GameEngine {
 
         return this.currentCase;
     }
+
+    public getCaseData(): CaseData | null {
+        return this.currentCase;
+    }
+
+    public resetCase(): CaseData {
+        return this.generateCase();
+    }
 }
