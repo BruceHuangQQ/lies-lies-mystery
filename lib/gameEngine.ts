@@ -45,8 +45,21 @@ type CaseData = {
 
 export class GameEngine {
     private data = gameData;
+    private currentCase: CaseData | null = null;
 
     private getRandomItem<T>(items: T[]): T {
         return items[Math.floor(Math.random() * items.length)];
+    }
+
+    private assignDetailsToSuspects(suspects: Suspect[]): Array<{
+        suspect: Suspect;
+        personality: Personality;
+        relationship: Relationship;
+    }> {
+        return suspects.map((suspect) => ({
+            suspect,
+            personality: this.getRandomItem(this.data.personalities),
+            relationship: this.getRandomItem(this.data.relationship_with_victim),
+        }));
     }
 }
