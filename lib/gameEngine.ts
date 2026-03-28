@@ -62,4 +62,21 @@ export class GameEngine {
             relationship: this.getRandomItem(this.data.relationship_with_victim),
         }));
     }
+
+    public generateCase(): CaseData {
+        const suspects = this.data.suspects;
+        const suspectsWithDetails = this.assignDetailsToSuspects(suspects);
+        const weapon = this.getRandomItem(this.data.weapons);
+        const location = this.getRandomItem(this.data.locations);
+        const motive = this.getRandomItem(this.data.motives);
+
+        this.currentCase = {
+            suspects: suspectsWithDetails,
+            weapon,
+            location,
+            motive,
+        };
+
+        return this.currentCase;
+    }
 }
