@@ -91,5 +91,19 @@
             "id": 3,
             "name": "Bedroom"
         }
+    ],
+    "motives": [
+        {
+            "id": 1,
+            "description": "Revenge for a past betrayal or wrongdoing."
+        },
+        {
+            "id": 2,
+            "description": "Greed for financial gain, such as inheritance or insurance."
+        },
+        {
+            "id": 3,
+            "description": "Jealousy over the victim's success, relationships, or possessions."
+        }
     ]
 }
