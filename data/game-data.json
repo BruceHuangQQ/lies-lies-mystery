@@ -12,5 +12,22 @@
             "id": 3,
             "name": "John"
         }
+    ],
+    "personalities":[
+        {
+            "personality": "Manipulative, persuasive, confident."
+        },
+        {
+            "personality": "Paranoid, timid, easily flustered."
+        },
+        {
+            "personality": "Impulsive, confrontational, stubborn."
+        },
+        {
+            "personality": "Reserved, secretive, observant."
+        },
+        {
+            "personality": "Overbearing, nosy, overly friendly."
+        }
     ]
 }
