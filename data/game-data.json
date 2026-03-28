@@ -34,6 +34,33 @@
             "personality": "Overbearing, nosy, overly friendly."
         }
     ],
+    "relationship_with_victim": [
+        {
+            "id": 1,
+            "relationship": "Estranged Sibling",
+            "description": "A sibling who had a falling out with the victim over family inheritance."
+        },
+        {
+            "id": 2,
+            "relationship": "Jealous Lover",
+            "description": "A romantic partner or ex-lover who felt betrayed or abandoned by the victim."
+        },
+        {
+            "id": 3,
+            "relationship": "Business Rival",
+            "description": "A competitor or former business partner who was wronged in a deal."
+        },
+        {
+            "id": 4,
+            "relationship": "Close Friend Turned Enemy",
+            "description": "A former best friend who had a falling out with the victim."
+        },
+        {
+            "id": 5,
+            "relationship": "Blackmail Victim",
+            "description": "Someone the victim was blackmailing, who wanted to end the manipulation."
+        }
+    ],
     "weapons": [
         {
             "id": 1,
