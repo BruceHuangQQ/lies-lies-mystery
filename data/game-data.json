@@ -15,19 +15,40 @@
     ],
     "personalities":[
         {
+            "id": 1,
             "personality": "Manipulative, persuasive, confident."
         },
         {
+            "id": 2,
             "personality": "Paranoid, timid, easily flustered."
         },
         {
             "personality": "Impulsive, confrontational, stubborn."
         },
         {
+            "id": 3,
             "personality": "Reserved, secretive, observant."
         },
         {
+
             "personality": "Overbearing, nosy, overly friendly."
+        }
+    ],
+    "weapons": [
+        {
+            "id": 1,
+            "name": "Knife",
+            "description": "A sharp kitchen knife with no fingerprints."
+        },
+        {
+            "id": 2,
+            "name": "Gun",
+            "description": "A small handgun with no fingerprints."
+        },
+        {
+            "id": 3,
+            "name": "Poison",
+            "description": "A vial of deadly poison."
         }
     ]
 }
