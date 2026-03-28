@@ -1,8 +1,11 @@
 import Link from "next/link";
-
+import { GameEngine } from "@/lib/gameEngine";
 import { Button } from "@/components/ui/8bit/button";
 
 export default function Home() {
+  const engine = new GameEngine();
+  engine.generateCase();
+  
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-16">
       <main className="flex max-w-4xl flex-col items-center gap-10 text-center">

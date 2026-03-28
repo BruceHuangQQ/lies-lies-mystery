@@ -1,4 +1,6 @@
 import gameData from "@/data/game-data.json";
+import fs from "fs";
+import path from "path";
 
 type Suspect = {
     id: number;
@@ -63,7 +65,7 @@ export class GameEngine {
         }));
     }
 
-    public generateCase(): CaseData {
+    public generateCase() {
         const suspects = this.data.suspects;
         const suspectsWithDetails = this.assignDetailsToSuspects(suspects);
         const weapon = this.getRandomItem(this.data.weapons);
@@ -76,6 +78,9 @@ export class GameEngine {
             location,
             motive,
         };
+
+        const filePath = path.join(process.cwd(), "data", "generated-case.json");
+        fs.writeFileSync(filePath, JSON.stringify(this.currentCase, null, 2), "utf8");
 
         return this.currentCase;
     }
