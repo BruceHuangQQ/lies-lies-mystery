@@ -87,7 +87,7 @@ export default function GameCTA1({
               size="lg"
               className="px-10 py-7 text-lg font-semibold"
             >
-              <Link href="/">Start interrogating</Link>
+              <Link href="/game">Start interrogating</Link>
             </Button>
         </div>
       </div>
