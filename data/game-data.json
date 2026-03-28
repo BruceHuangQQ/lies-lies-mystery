@@ -50,5 +50,19 @@
             "name": "Poison",
             "description": "A vial of deadly poison."
         }
+    ],
+    "locations": [
+        {
+            "id": 1,
+            "name": "Library"
+        },
+        {
+            "id": 2,
+            "name": "Garden"
+        },
+        {
+            "id": 3,
+            "name": "Bedroom"
+        }
     ]
 }
