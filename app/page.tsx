@@ -23,7 +23,7 @@ export default function Home() {
           size="lg"
           className="h-15 min-w-[200px] px-10 text-xl font-semibold"
         >
-          <Link href="/empty">Start game</Link>
+          <Link href="/file">Start game</Link>
         </Button>
       </main>
     </div>
