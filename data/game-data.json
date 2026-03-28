@@ -23,14 +23,15 @@
             "personality": "Paranoid, timid, easily flustered."
         },
         {
+            "id": 3,
             "personality": "Impulsive, confrontational, stubborn."
         },
         {
-            "id": 3,
+            "id": 4,
             "personality": "Reserved, secretive, observant."
         },
         {
-
+            "id": 5,
             "personality": "Overbearing, nosy, overly friendly."
         }
     ],
