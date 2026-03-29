@@ -63,6 +63,7 @@ export default function GamePage() {
   const [verdict, setVerdict] = useState<null | { status: "win" | "lose"; message: string }>(null);
   const [showVerdictActions, setShowVerdictActions] = useState(false);
 
+  const [isIntroDialogOpen, setIsIntroDialogOpen] = useState(true);
   const [isSolveDialogOpen, setIsSolveDialogOpen] = useState(false);
 
   function handleAccusation(e: FormEvent<HTMLFormElement>) {
@@ -295,6 +296,24 @@ export default function GamePage() {
               </div>
             </div>
           )}
+
+          <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
+            <DialogContent className="backdrop-blur-sm bg-black/70 text-white">
+              <DialogHeader>
+                <DialogTitle>Limited Actions</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Tutorial about action economy
+                </DialogDescription>
+              </DialogHeader>
+              <p className="retro text-sm leading-relaxed">
+                You only have 10 actions to solve this case. Every interrogation question spends 1.
+                Use them wisely before making your accusation.
+              </p>
+              <Button className="mt-4 w-full bg-emerald-500 text-emerald-950 hover:bg-emerald-400" onClick={() => setIsIntroDialogOpen(false)}>
+                Got it
+              </Button>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>
