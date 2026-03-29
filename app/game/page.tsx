@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 
 import caseContent from "@/data/case-file.json";
 import { useCase } from "@/lib/case-context";
+import { useRouter } from "next/navigation";
 
 // dummy data: location, dialogue
 // will make a 'game engine' to random select SUSPECT, WEAPON, MOTIVE, LOCATION. A react hook? To pass game data into AI & this page
@@ -36,7 +37,7 @@ const SUSPECT_LAYOUT = [
 ] as const;
 
 export default function GamePage() {
-  const { caseData, story, actionsRemaining } = useCase();
+  const { caseData, story, actionsRemaining, resetActions } = useCase();
   const storyText = story ?? caseContent.story;
   const isOutOfActions = actionsRemaining <= 0;
   
@@ -47,19 +48,28 @@ export default function GamePage() {
     selectedSuspectId === null ? null : suspects.find((s) => s.id === selectedSuspectId) ?? null;
 
   const [selectedAccusation, setSelectedAccusation] = useState<string | null>(null);
-  const [resultMessage, setResultMessage] = useState<string | null>(null);
 
-  function handleAccusation(e: HTMLFormElement) {
+  const [verdict, setVerdict] = useState<null | { status: "win" | "lose"; message: string }>(null);
+  const [showVerdictActions, setShowVerdictActions] = useState(false);
+
+  const router = useRouter();
+
+  const [isSolveDialogOpen, setIsSolveDialogOpen] = useState(false);
+
+  function handleAccusation(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selectedAccusation || !caseData) return;
 
     const isCorrect = Number(selectedAccusation) === caseData.murdererId;
-    setResultMessage(
-      isCorrect
-        ? "Correct! You solved the case."
-        : "Wrong accusation. The real killer walks free..."
-    );
-    // optional: reset actions / close dialog / prompt for new game
+    setVerdict({
+      status: isCorrect ? "win" : "lose",
+      message: isCorrect
+        ? "Correct \n The killer confesses under your glare."
+        : "Wrong suspect... \n The true murderer vanishes into the stormy night.",
+    });
+    setShowVerdictActions(false);
+    setIsSolveDialogOpen(false);
+    setTimeout(() => setShowVerdictActions(true), 1500);
   }
 
   return (
@@ -174,7 +184,7 @@ export default function GamePage() {
             )}
           </div>
           
-          <Dialog>
+          <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
               <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
                 Solve the case
@@ -210,14 +220,58 @@ export default function GamePage() {
                   Submit accusation
                 </Button>
               </form>
-
-              {resultMessage && (
-                <p className="retro text-sm text-center mt-2">
-                  {resultMessage}
-                </p>
-              )}
             </DialogContent>
           </Dialog>
+
+          {verdict && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  className={cn(
+                    "retro w-full max-w-md rounded border-2 px-6 py-5 text-sm leading-relaxed shadow-2xl",
+                    verdict.status === "win"
+                      ? "border-emerald-500 bg-emerald-900/90 text-emerald-50"
+                      : "border-red-500 bg-red-900/90 text-red-50"
+                  )}
+                >
+                  <p className="text-xs uppercase tracking-[0.3em] mb-2 text-center">
+                    {verdict.status === "win" ? "Case Closed" : "Case Failed"}
+                  </p>
+                  <div className="space-y-2 text-center">
+                    {verdict.message.split("\n").map((line) => (
+                      <p key={line}>{line.trim()}</p>
+                    ))}
+                  </div>
+                  {!showVerdictActions && (
+                    <p className="mt-3 text-[10px] text-emerald-200 animate-pulse">
+                      Clearing the scene...
+                    </p>
+                  )}
+                  {showVerdictActions && (
+                    <div className="mt-4 flex flex-col gap-6">
+                      <Button
+                        variant="default"
+                        className="w-full"
+                        onClick={() => {
+                          resetActions();
+                          router.push("/file");
+                        }}
+                      >
+                        Accept new case
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        className="w-full"
+                        onClick={() => router.push("/")}
+                      >
+                        Leave the scene
+                      </Button>
+                    </div>
+                  )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
