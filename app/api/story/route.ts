@@ -7,8 +7,7 @@ export async function POST() {
     const engine = new GameEngine();
     const caseData = engine.generateCase();
     const story = await generateStory(caseData);
-
-    engine.updateCaseStory(story); // writes to data/case-file.json
+    
     return NextResponse.json({ caseData, story });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
