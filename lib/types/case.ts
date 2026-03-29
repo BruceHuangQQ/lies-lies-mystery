@@ -1,4 +1,4 @@
-export type Suspect = { id: number; name: string };
+export type Suspect = { id: number; name: string; image: string };
 export type Personality = { id: number; personality: string };
 export type Relationship = { id: number; relationship: string; description: string };
 export type Weapon = { id: number; name: string; description: string };
@@ -19,4 +19,10 @@ export type CaseData = {
 export type StoryPayload = {
   caseData: CaseData;
   story: string;
+  caseId: string;
+};
+
+export type InterrogationChatMessage = {
+  role: "user" | "assistant";
+  content: string;
 };

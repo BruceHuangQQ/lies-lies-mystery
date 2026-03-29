@@ -4,10 +4,5 @@
   "storyBadge": "STORY",
   "story": "Victor Hale is dead.\n\nA powerful tech entrepreneur, found lifeless in his own penthouse late at night.\n\nNo forced entry. No signs of struggle. Just a quiet, calculated murder.\n\nYou arrive at the scene. Something feels off.\n\nSecurity logs confirm it—only three people had access to the penthouse that night.\n\nAnd now, they sit before you.",
   "instructionBadge": "HOW TO PLAY",
-  "howToPlay": "Understand the case by reviewing the situation and each suspect’s background. Interrogate every suspect about alibis, motives, and relationships. Compare what they say and watch for contradictions. Pick up clues as they surface during questioning. When you are ready, make one accusation and choose a single suspect as the murderer.",
-  "suspects": [
-    { "id": "alice", "name": "Alice", "image": "/suspect/alice.png" },
-    { "id": "ben", "name": "Ben", "image": "/suspect/ben.png" },
-    { "id": "dan", "name": "Dan", "image": "/suspect/dan.png" }
-  ]
+  "howToPlay": "Understand the case by reviewing the situation and each suspect’s background. Interrogate every suspect about alibis, motives, and relationships. Compare what they say and watch for contradictions. Pick up clues as they surface during questioning. When you are ready, make one accusation and choose a single suspect as the murderer."
 }
