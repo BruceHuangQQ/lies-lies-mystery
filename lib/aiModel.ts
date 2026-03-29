@@ -37,6 +37,8 @@ export async function generateStory(caseData: CaseData) {
   return completion.choices[0]?.message?.content?.trim() ?? "";
 }
 
+
+// TODO dynamic murderer prompt
 export async function generateInterrogationReply(input: {
   story: string;
   caseData: CaseData;
