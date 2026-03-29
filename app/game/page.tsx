@@ -71,11 +71,15 @@ export default function GamePage() {
     if (!selectedAccusation || !caseData) return;
 
     const isCorrect = Number(selectedAccusation) === caseData.murdererId;
+
+    const murderer = caseData.suspects.find(
+      (entry) => entry.suspect.id === caseData.murdererId
+    );
     setVerdict({
       status: isCorrect ? "win" : "lose",
       message: isCorrect
         ? "Correct \n The killer confesses under your glare."
-        : "Wrong suspect... \n The true murderer vanishes into the stormy night.",
+        : `Wrong suspect... \n The true murderer was ${murderer?.suspect.name || "unknown"}.`,
     });
     setShowVerdictActions(false);
     setIsSolveDialogOpen(false);
