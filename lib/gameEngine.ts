@@ -36,6 +36,7 @@ export class GameEngine {
 
         this.currentCase = {
             suspects: suspectsWithDetails,
+            murdererId: this.getRandomItem(suspects).id,
             weapon,
             location,
             motive,
