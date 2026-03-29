@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LoopTypewriterSubtitle } from "@/components/loop-typewriter-subtitle";
 import { GameEngine } from "@/lib/gameEngine";
 import { Button } from "@/components/ui/8bit/button";
 
@@ -15,9 +16,7 @@ export default function Home() {
           </p> */}
           <h1 className="mb-7 text-5xl font-mono font-bold tracking-tight text-balance sm:text-6xl md:text-7xl lg:text-8xl">
             <span className="block">LLM</span>
-            <span className="mt-2 block text-3xl font-semibold tracking-tight text-muted-foreground sm:text-4xl md:text-5xl lg:text-4xl">
-              Lies, Lies, Mystery
-            </span>
+            <LoopTypewriterSubtitle />
           </h1>
         </div>
 
