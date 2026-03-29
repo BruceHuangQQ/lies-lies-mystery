@@ -6,6 +6,8 @@ import { DialogueLine } from "@/components/dialogue-line";
 import { Input } from "@/components/ui/8bit/input";
 import { Spinner } from "@/components/ui/8bit/spinner";
 
+import { useCase } from "@/lib/case-context";
+
 const REPLY_DELAY_MS = 1800;
 
 type ChatLine = { id: string; speaker: string; text: string };
@@ -16,6 +18,9 @@ export function InterrogationChat({ suspectName }: { suspectName: string }) {
   const [isResponding, setIsResponding] = useState(false);
   const transcriptRef = useRef<HTMLDivElement>(null);
   const replyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const { actionsRemaining, decrementAction } = useCase();
+  const isOutOfActions = actionsRemaining <= 0;
 
   useEffect(() => {
     return () => {
@@ -31,6 +36,7 @@ export function InterrogationChat({ suspectName }: { suspectName: string }) {
     e.preventDefault();
     const text = draft.trim();
     if (!text || isResponding) return;
+    if (actionsRemaining <= 0) return;
 
     const userLine: ChatLine = {
       id: crypto.randomUUID(),
@@ -40,7 +46,8 @@ export function InterrogationChat({ suspectName }: { suspectName: string }) {
     setMessages((prev) => [...prev, userLine]);
     setDraft("");
     setIsResponding(true);
-
+    decrementAction();
+    
     //I asked AI to create a reply delay for suspects
     if (replyTimeoutRef.current) clearTimeout(replyTimeoutRef.current);
     replyTimeoutRef.current = setTimeout(() => {
@@ -84,9 +91,9 @@ export function InterrogationChat({ suspectName }: { suspectName: string }) {
         <Input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Type what you want to say…"
           aria-label="Your message"
-          disabled={isResponding}
+          disabled={isResponding || isOutOfActions}
+          placeholder={isOutOfActions ? "No actions left - accuse the culprit." : "Type what you want to say…"}
           className="w-full shrink-0 disabled:opacity-60"
         />
       </form>

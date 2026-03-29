@@ -38,6 +38,7 @@ const SUSPECT_LAYOUT = [
 export default function GamePage() {
   const { caseData, story, actionsRemaining } = useCase();
   const storyText = story ?? caseContent.story;
+  const isOutOfActions = actionsRemaining <= 0;
   
   const suspects = caseContent.suspects;
   const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(null);
@@ -152,6 +153,9 @@ export default function GamePage() {
 
           <div className="retro text-xs">
             Actions left: {actionsRemaining}/10
+            {isOutOfActions && (
+              <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
+            )}
           </div>
           
           <Dialog>
