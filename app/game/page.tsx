@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Image from "next/image";
 
 import { InterrogationChat } from "@/components/interrogation-chat";
@@ -45,6 +45,22 @@ export default function GamePage() {
 
   const selectedSuspect =
     selectedSuspectId === null ? null : suspects.find((s) => s.id === selectedSuspectId) ?? null;
+
+  const [selectedAccusation, setSelectedAccusation] = useState<string | null>(null);
+  const [resultMessage, setResultMessage] = useState<string | null>(null);
+
+  function handleAccusation(e: HTMLFormElement) {
+    e.preventDefault();
+    if (!selectedAccusation || !caseData) return;
+
+    const isCorrect = Number(selectedAccusation) === caseData.murdererId;
+    setResultMessage(
+      isCorrect
+        ? "Correct! You solved the case."
+        : "Wrong accusation. The real killer walks free..."
+    );
+    // optional: reset actions / close dialog / prompt for new game
+  }
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
@@ -173,14 +189,12 @@ export default function GamePage() {
               </DialogHeader>
               <form
                 className="grid gap-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
+                onSubmit={handleAccusation}
               >
                 <label htmlFor="accusation" className="retro text-[10px]">
                   Who is the murderer?
                 </label>
-                <Select>
+                <Select onValueChange={setSelectedAccusation}>
                   <SelectTrigger id="accusation">
                     <SelectValue placeholder="Choose a suspect…" />
                   </SelectTrigger>
@@ -192,10 +206,16 @@ export default function GamePage() {
                     ))}
                   </SelectContent>
                 </Select>
-                <Button type="button" variant="default" className="w-full">
+                <Button type="submit" variant="default" className="w-full">
                   Submit accusation
                 </Button>
               </form>
+
+              {resultMessage && (
+                <p className="retro text-sm text-center mt-2">
+                  {resultMessage}
+                </p>
+              )}
             </DialogContent>
           </Dialog>
         </div>

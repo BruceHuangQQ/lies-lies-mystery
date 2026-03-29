@@ -6,8 +6,8 @@
   "instructionBadge": "HOW TO PLAY",
   "howToPlay": "Understand the case by reviewing the situation and each suspect’s background. Interrogate every suspect about alibis, motives, and relationships. Compare what they say and watch for contradictions. Pick up clues as they surface during questioning. When you are ready, make one accusation and choose a single suspect as the murderer.",
   "suspects": [
-    { "id": "alice", "name": "Alice", "image": "/suspect/alice.png" },
-    { "id": "ben", "name": "Ben", "image": "/suspect/ben.png" },
-    { "id": "dan", "name": "Dan", "image": "/suspect/dan.png" }
+    { "id": "1", "name": "Alice", "image": "/suspect/alice.png" },
+    { "id": "2", "name": "Ben", "image": "/suspect/ben.png" },
+    { "id": "3", "name": "Dan", "image": "/suspect/dan.png" }
   ]
 }
