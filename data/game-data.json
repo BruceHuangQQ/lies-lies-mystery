@@ -1,0 +1,110 @@
+{
+    "suspects":[
+        {
+            "id": 1,
+            "name": "Alice"
+        },
+        {
+            "id": 2,
+            "name": "Bob"
+        },
+        {
+            "id": 3,
+            "name": "John"
+        }
+    ],
+    "personalities":[
+        {
+            "id": 1,
+            "personality": "Manipulative, persuasive, confident."
+        },
+        {
+            "id": 2,
+            "personality": "Paranoid, timid, easily flustered."
+        },
+        {
+            "id": 3,
+            "personality": "Impulsive, confrontational, stubborn."
+        },
+        {
+            "id": 4,
+            "personality": "Reserved, secretive, observant."
+        },
+        {
+            "id": 5,
+            "personality": "Overbearing, nosy, overly friendly."
+        }
+    ],
+    "relationship_with_victim": [
+        {
+            "id": 1,
+            "relationship": "Estranged Sibling",
+            "description": "A sibling who had a falling out with the victim over family inheritance."
+        },
+        {
+            "id": 2,
+            "relationship": "Jealous Lover",
+            "description": "A romantic partner or ex-lover who felt betrayed or abandoned by the victim."
+        },
+        {
+            "id": 3,
+            "relationship": "Business Rival",
+            "description": "A competitor or former business partner who was wronged in a deal."
+        },
+        {
+            "id": 4,
+            "relationship": "Close Friend Turned Enemy",
+            "description": "A former best friend who had a falling out with the victim."
+        },
+        {
+            "id": 5,
+            "relationship": "Blackmail Victim",
+            "description": "Someone the victim was blackmailing, who wanted to end the manipulation."
+        }
+    ],
+    "weapons": [
+        {
+            "id": 1,
+            "name": "Knife",
+            "description": "A sharp kitchen knife with no fingerprints."
+        },
+        {
+            "id": 2,
+            "name": "Gun",
+            "description": "A small handgun with no fingerprints."
+        },
+        {
+            "id": 3,
+            "name": "Poison",
+            "description": "A vial of deadly poison."
+        }
+    ],
+    "locations": [
+        {
+            "id": 1,
+            "name": "Library"
+        },
+        {
+            "id": 2,
+            "name": "Garden"
+        },
+        {
+            "id": 3,
+            "name": "Bedroom"
+        }
+    ],
+    "motives": [
+        {
+            "id": 1,
+            "description": "Revenge for a past betrayal or wrongdoing."
+        },
+        {
+            "id": 2,
+            "description": "Greed for financial gain, such as inheritance or insurance."
+        },
+        {
+            "id": 3,
+            "description": "Jealousy over the victim's success, relationships, or possessions."
+        }
+    ]
+}
