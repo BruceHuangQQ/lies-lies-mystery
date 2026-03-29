@@ -36,7 +36,7 @@ const SUSPECT_LAYOUT = [
 ] as const;
 
 export default function GamePage() {
-  const { caseData, story } = useCase();
+  const { caseData, story, actionsRemaining } = useCase();
   const storyText = story ?? caseContent.story;
   
   const suspects = caseContent.suspects;
@@ -150,6 +150,10 @@ export default function GamePage() {
             </DialogContent>
           </Dialog>
 
+          <div className="retro text-xs">
+            Actions left: {actionsRemaining}/10
+          </div>
+          
           <Dialog>
             <DialogTrigger asChild>
               <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
