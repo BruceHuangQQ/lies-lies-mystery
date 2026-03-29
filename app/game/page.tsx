@@ -111,17 +111,23 @@ export default function GamePage() {
                     aria-label={s.name}
                     onClick={() => setSelectedSuspectId(s.id)}
                     className={cn(
-                      "group absolute flex cursor-pointer items-end justify-center overflow-visible bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                      "group absolute flex flex-col items-center gap-2 cursor-pointer bg-transparent p-0 text-center",
                       SUSPECT_LAYOUT[i]
                     )}
                   >
-                    <Image
-                      src={s.image}
-                      alt=""
-                      fill
-                      sizes="(max-width: 896px) 24vw, 300px"
-                      className="object-contain object-bottom pixelated transition duration-150 ease-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:drop-shadow-md group-hover:-translate-y-0.5 group-active:scale-[0.98]"
-                    />
+                    {/* TODO make name center on top of images */}
+                    <span className="retro rounded bg-black/70 px-3 py-1 text-[10px] uppercase text-white shadow">
+                      {s.name}
+                    </span>
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={s.image}
+                        alt=""
+                        fill
+                        sizes="(max-width: 896px) 24vw, 300px"
+                        className="object-contain object-bottom pixelated transition duration-150 ease-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:drop-shadow-md group-hover:-translate-y-0.5 group-active:scale-[0.98]"
+                      />
+                    </div>
                   </button>
                 ))
               ) : (
