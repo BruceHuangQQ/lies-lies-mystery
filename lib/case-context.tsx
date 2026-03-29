@@ -15,7 +15,7 @@ interface CaseState {
   resetActions: () => void;
 }
 
-const MAX_ACTIONS = 2;
+const MAX_ACTIONS = 10;
 
 const CaseContext = createContext<CaseState | undefined>(undefined);
 
