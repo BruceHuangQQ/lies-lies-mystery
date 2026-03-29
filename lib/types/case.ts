@@ -15,3 +15,8 @@ export type CaseData = {
   location: Location;
   motive: Motive;
 };
+
+export type StoryPayload = {
+  caseData: CaseData;
+  story: string;
+};
