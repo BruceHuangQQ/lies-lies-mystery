@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 
+import { InterrogationChat } from "@/components/interrogation-chat";
 import { Button } from "@/components/ui/8bit/button";
-import { Input } from "@/components/ui/8bit/input";
 import {
   Dialog,
   DialogClose,
@@ -21,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/8bit/select";
-import { DialogueLine } from "@/components/dialogue-line";
 import { cn } from "@/lib/utils";
 
 import caseContent from "@/data/case-file.json";
@@ -38,6 +37,7 @@ const SUSPECT_LAYOUT = [
 export default function GamePage() {
   const suspects = caseContent.suspects;
   const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(null);
+
   const selectedSuspect =
     selectedSuspectId === null ? null : suspects.find((s) => s.id === selectedSuspectId) ?? null;
 
@@ -72,6 +72,7 @@ export default function GamePage() {
                       src={s.image}
                       alt=""
                       fill
+                      sizes="(max-width: 896px) 24vw, 300px"
                       className="object-contain object-bottom pixelated transition duration-150 ease-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:drop-shadow-md group-hover:-translate-y-0.5 group-active:scale-[0.98]"
                     />
                   </button>
@@ -99,26 +100,19 @@ export default function GamePage() {
                       type="button"
                       aria-label="Back to suspects"
                       onClick={() => setSelectedSuspectId(null)}
-                      className="flex h-10 w-10 shrink-0 items-center justify-center bg-transparent cursor-pointer"
+                      className="group flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-200"
                     >
                       <Image
                         src="/arrow.png"
                         alt=""
                         width={32}
                         height={32}
-                        className="pixelated"
+                        className="h-auto w-auto pixelated transition duration-150 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-md group-active:scale-95"
                       />
                     </button>
-                    <div className="retro flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1 text-[10px]">
-                      <DialogueLine speaker={selectedSuspect.name}>
-                        (Dialogue will appear here during interrogation.)
-                      </DialogueLine>
-                      <DialogueLine speaker="You">…</DialogueLine>
-                    </div>
-                    <Input
-                      placeholder="Type what you want to say…"
-                      aria-label="Your message"
-                      className="w-full shrink-0"
+                    <InterrogationChat
+                      key={selectedSuspectId!}
+                      suspectName={selectedSuspect.name}
                     />
                   </div>
                 </div>
