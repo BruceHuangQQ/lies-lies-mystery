@@ -1,49 +1,11 @@
 import gameData from "@/data/game-data.json";
-import fs from "fs";
-import path from "path";
 
-type Suspect = {
-    id: number;
-    name: string;
-};
-
-type Personality = {
-    id: number;
-    personality: string;
-};
-
-type Relationship = {
-    id: number;
-    relationship: string;
-    description: string;
-};
-
-type Weapon = {
-    id: number;
-    name: string;
-    description: string;
-};
-
-type Location = {
-    id: number;
-    name: string;
-};
-
-type Motive = {
-    id: number;
-    description: string;
-};
-
-type CaseData = {
-    suspects: Array<{
-        suspect: Suspect;
-        personality: Personality;
-        relationship: Relationship;
-    }>;
-    weapon: Weapon;
-    location: Location;
-    motive: Motive;
-};
+import {
+  CaseData,
+  Suspect,
+  Personality,
+  Relationship
+} from "@/lib/types/case";
 
 export class GameEngine {
     private data = gameData;
@@ -78,9 +40,6 @@ export class GameEngine {
             location,
             motive,
         };
-
-        const filePath = path.join(process.cwd(), "data", "generated-case.json");
-        fs.writeFileSync(filePath, JSON.stringify(this.currentCase, null, 2), "utf8");
 
         return this.currentCase;
     }

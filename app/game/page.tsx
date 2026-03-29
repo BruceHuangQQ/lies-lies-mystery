@@ -24,6 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import caseContent from "@/data/case-file.json";
+import { useCase } from "@/lib/case-context";
 
 // dummy data: location, dialogue
 // will make a 'game engine' to random select SUSPECT, WEAPON, MOTIVE, LOCATION. A react hook? To pass game data into AI & this page
@@ -35,6 +36,9 @@ const SUSPECT_LAYOUT = [
 ] as const;
 
 export default function GamePage() {
+  const { caseData, story } = useCase();
+  const storyText = story ?? caseContent.story;
+  
   const suspects = caseContent.suspects;
   const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(null);
 
@@ -136,7 +140,7 @@ export default function GamePage() {
                 </DialogDescription>
               </DialogHeader>
               <p className="retro text-muted-foreground whitespace-pre-line text-[10px] leading-relaxed">
-                {caseContent.story}
+                {storyText}
               </p>
               <DialogClose asChild>
                 <Button variant="secondary" className="mt-2 w-full">
