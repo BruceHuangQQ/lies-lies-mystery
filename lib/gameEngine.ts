@@ -9,6 +9,18 @@ import {
   Relationship
 } from "@/lib/types/case";
 
+type CaseFileContent = {
+        title: string;
+        description: string;
+        storyBadge: string;
+        story: string;
+        instructionBadge: string;
+        howToPlay: string;
+        ctaLabel: string;
+        ctaHref: string;
+        suspects: Array<{ id: string; name: string; image: string }>;
+};
+
 export class GameEngine {
     private data = gameData;
     private currentCase: CaseData | null = null;
@@ -43,9 +55,6 @@ export class GameEngine {
             motive,
         };
 
-        const filePath = path.join(process.cwd(), "data", "generated-case.json");
-        fs.writeFileSync(filePath, JSON.stringify(this.currentCase, null, 2), "utf8");
-
         return this.currentCase;
     }
 
@@ -55,5 +64,22 @@ export class GameEngine {
 
     public resetCase(): CaseData {
         return this.generateCase();
+    }
+
+    public updateCaseStory(story: string) {
+        const filePath = path.join(process.cwd(), "data", "case-file.json");
+        const fileContents = fs.readFileSync(filePath, "utf8");
+        let json: CaseFileContent;
+        try {
+            json = JSON.parse(fileContents);
+        } catch (err) {
+            throw new Error("Failed to parse case-file.json");
+        }
+
+        json.story = story;
+
+        fs.writeFileSync(filePath, JSON.stringify(json, null, 2), "utf8");
+
+        return json;
     }
 }
