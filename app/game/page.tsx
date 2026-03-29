@@ -25,7 +25,9 @@ import {
 import { cn } from "@/lib/utils";
 
 import caseContent from "@/data/case-file.json";
+import gameData from "@/data/game-data.json";
 import { useCase } from "@/lib/case-context";
+import type { Suspect } from "@/lib/types/case";
 
 // dummy data: location, dialogue
 // will make a 'game engine' to random select SUSPECT, WEAPON, MOTIVE, LOCATION. A react hook? To pass game data into AI & this page
@@ -39,7 +41,7 @@ const SUSPECT_LAYOUT = [
 export default function GamePage() {
   const router = useRouter();
   // caseData will be used to dynamically render SUSPECT and Answers
-  const { caseData, story } = useCase();
+  const { caseData, story, caseId } = useCase();
   const storyText = story ?? caseContent.story;
 
   useEffect(() => {
@@ -48,11 +50,15 @@ export default function GamePage() {
     }
   }, [story, router]);
 
-  const suspects = caseContent.suspects;
-  const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(null);
+  // use suspect data from game data
+  const suspects = gameData.suspects as Suspect[];
+  const [selectedSuspectId, setSelectedSuspectId] = useState<number | null>(null);
 
   const selectedSuspect =
     selectedSuspectId === null ? null : suspects.find((s) => s.id === selectedSuspectId) ?? null;
+
+  const selectedSuspectIndex =
+    selectedSuspectId === null ? -1 : suspects.findIndex((s) => s.id === selectedSuspectId);
 
   if (story === null) {
     return null;
@@ -129,7 +135,12 @@ export default function GamePage() {
                     </button>
                     <InterrogationChat
                       key={selectedSuspectId!}
+                      caseId={caseId}
+                      suspectId={String(selectedSuspect.id)}
+                      suspectIndex={selectedSuspectIndex}
                       suspectName={selectedSuspect.name}
+                      caseData={caseData}
+                      story={story}
                     />
                   </div>
                 </div>
@@ -191,7 +202,7 @@ export default function GamePage() {
                   </SelectTrigger>
                   <SelectContent>
                     {suspects.map((s) => (
-                      <SelectItem key={s.id} value={s.id}>
+                      <SelectItem key={s.id} value={String(s.id)}>
                         {s.name}
                       </SelectItem>
                     ))}

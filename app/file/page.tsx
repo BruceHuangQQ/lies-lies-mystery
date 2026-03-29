@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/8bit/button";
+import { Spinner } from "@/components/ui/8bit/spinner";
 import {
   Card,
   CardContent,
@@ -18,7 +19,7 @@ import { StoryPayload } from "@/lib/types/case";
 import { useCase } from "@/lib/case-context";
 
 export default function File() {
-  const { setCaseData, setStory, story } = useCase();
+  const { setCaseData, setStory, setCaseId, story } = useCase();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,9 +27,13 @@ export default function File() {
     async function refreshStory() {
       try {
         const res = await fetch("/api/story", { method: "POST" });
-        const data: StoryPayload = await res.json();
+        const data: StoryPayload & { error?: string } = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error ?? "Failed to load story");
+        }
         setCaseData(data.caseData);
         setStory(data.story);
+        setCaseId(data.caseId);
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Unknown story error";
@@ -39,7 +44,7 @@ export default function File() {
     }
 
     refreshStory();
-  }, [setCaseData, setStory]);
+  }, [setCaseData, setStory, setCaseId]);
 
   const title = caseContent.title;
   const description = caseContent.description;
@@ -70,7 +75,16 @@ export default function File() {
             </CardHeader>
             <CardContent>
             {loading ? (
-              <p className="retro text-sm text-muted-foreground">Loading story…</p>
+              <div
+                className="flex min-h-[4rem] items-center justify-center gap-2 text-muted-foreground"
+                role="status"
+                aria-live="polite"
+              >
+                <Spinner variant="diamond" className="size-6 text-chart-1" />
+                <span className="retro text-sm">Loading story…</span>
+              </div>
+            ) : error ? (
+              <p className="retro text-sm text-destructive">{error}</p>
             ) : (
               <TypewriterText
                 className="text-muted-foreground retro whitespace-pre-line text-[15px] leading-relaxed"

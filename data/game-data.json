@@ -2,15 +2,18 @@
     "suspects":[
         {
             "id": 1,
-            "name": "Alice"
+            "name": "Alice",
+            "image": "/suspect/alice.png"
         },
         {
             "id": 2,
-            "name": "Bob"
+            "name": "Ben",
+            "image": "/suspect/ben.png"
         },
         {
             "id": 3,
-            "name": "John"
+            "name": "Dan",
+            "image": "/suspect/dan.png"
         }
     ],
     "personalities":[
