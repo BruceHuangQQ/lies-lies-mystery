@@ -15,9 +15,10 @@ import TypewriterText from "@/components/smoothui/typewriter-text";
 
 import caseContent from "@/data/case-file.json";
 import { StoryPayload } from "@/lib/types/case";
+import { useCase } from "@/lib/case-context";
 
 export default function File() {
-  const [story, setStory] = useState(caseContent.story);
+  const { setCaseData, setStory, story } = useCase();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,9 +26,9 @@ export default function File() {
     async function refreshStory() {
       try {
         const res = await fetch("/api/story", { method: "POST" });
-        if (!res.ok) throw new Error("Story generation failed");
         const data: StoryPayload = await res.json();
-        setStory(data.story ?? caseContent.story);
+        setCaseData(data.caseData);
+        setStory(data.story);
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Unknown story error";
@@ -38,7 +39,7 @@ export default function File() {
     }
 
     refreshStory();
-  }, []);
+  }, [setCaseData, setStory]);
 
   const title = caseContent.title;
   const description = caseContent.description;
@@ -75,7 +76,7 @@ export default function File() {
                 className="text-muted-foreground retro whitespace-pre-line text-[15px] leading-relaxed"
                 speed={30}
               >
-                {story}
+                {story ?? caseContent.story}
               </TypewriterText>
             )}
           </CardContent>
