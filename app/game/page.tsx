@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { InterrogationChat } from "@/components/interrogation-chat";
 import { Button } from "@/components/ui/8bit/button";
@@ -36,14 +37,26 @@ const SUSPECT_LAYOUT = [
 ] as const;
 
 export default function GamePage() {
+  const router = useRouter();
+  // caseData will be used to dynamically render SUSPECT and Answers
   const { caseData, story } = useCase();
   const storyText = story ?? caseContent.story;
-  
+
+  useEffect(() => {
+    if (story === null) {
+      router.replace("/");
+    }
+  }, [story, router]);
+
   const suspects = caseContent.suspects;
   const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(null);
 
   const selectedSuspect =
     selectedSuspectId === null ? null : suspects.find((s) => s.id === selectedSuspectId) ?? null;
+
+  if (story === null) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
