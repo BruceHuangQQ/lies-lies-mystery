@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/8bit/select";
+import { DialogueLine } from "@/components/dialogue-line";
 import { cn } from "@/lib/utils";
 
 import caseContent from "@/data/case-file.json";
@@ -30,28 +31,6 @@ const SUSPECT_LAYOUT = [
   "left-1/2 bottom-0 h-[min(68%,480px)] w-[min(24%,300px)] -translate-x-1/2",
   "left-[78%] bottom-0 h-[min(68%,480px)] w-[min(24%,300px)] -translate-x-1/2",
 ] as const;
-
-// TODO: Move 
-function DialogueLine({
-  speaker,
-  children,
-}: {
-  speaker: string;
-  children: React.ReactNode;
-}) {
-  const isYou = speaker.toLowerCase() === "you";
-  return (
-    <div
-      className={cn(
-        "border-2 border-sky-700/80 bg-sky-950/40 p-2",
-        isYou ? "text-right" : "text-left"
-      )}
-    >
-      <p className="retro mb-1 text-[9px] uppercase tracking-wide text-sky-300/90">{speaker}</p>
-      <p className="retro text-[10px] leading-relaxed text-foreground">{children}</p>
-    </div>
-  );
-}
 
 export default function GamePage() {
   const suspects = caseContent.suspects;
