@@ -283,7 +283,10 @@ export default function GamePage() {
                       <Button
                         variant="destructive"
                         className="w-full"
-                        onClick={() => router.push("/")}
+                        onClick={() => {
+                          resetActions();
+                          router.push("/")
+                        }}
                       >
                         Leave the scene
                       </Button>
