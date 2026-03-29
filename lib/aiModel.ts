@@ -21,12 +21,12 @@ export async function generateStory(caseData: CaseData) {
         content: `Generate a fresh case-story for our game using this structured data: ${JSON.stringify(caseData)}, write a tense intro paragraph for the detective case.
         Requirements:
         - Opening: establish the victim, murder scene, and the unsettling mood.
-        - Middle: briefly highlight each suspect's demeanor (personality) and relationship to the victim. Do not reveal the motive.
+        - Middle: briefly highlight each suspect's demeanor (personality) and relationship to the victim. Do not reveal the murderer and the motive.
         - Closing sentence: a cinematic call-to-action for the detective.
         - IMPORTANT: Format as plain text with newline breaks between paragraphs, no markdown, no lists.
         - Keep it under 150 words.
-        - Do NOT add new facts
-        - Do NOT contradict any details
+        - Do NOT add new facts.
+        - Do NOT contradict any details.
         - Keep it family-friendly`,
       }
     ],

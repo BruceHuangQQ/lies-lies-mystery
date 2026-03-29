@@ -6,24 +6,36 @@ import type { CaseData } from './types/case';
 interface CaseState {
   caseData: CaseData | null;
   story: string | null;
+  actionsRemaining: number;
   caseId: string | null;
+  setCaseId: (caseId: string | null) => void;
   setCaseData: (caseData: CaseData | null) => void;
   setStory: (story: string | null) => void;
-  setCaseId: (caseId: string | null) => void;
+  decrementAction: () => void;
+  resetActions: () => void;
 }
 
+const MAX_ACTIONS = 2;
 
 const CaseContext = createContext<CaseState | undefined>(undefined);
 
 export function CaseProvider({ children }: { children: React.ReactNode }) {
   const [caseData, setCaseData] = useState<CaseData | null>(null);
   const [story, setStory] = useState<string | null>(null);
+  const [actionsRemaining, setActionsRemaining] = useState<number>(MAX_ACTIONS);
   const [caseId, setCaseId] = useState<string | null>(null);
+  
+  const decrementAction = () => {
+    setActionsRemaining((prev) => Math.max(0, prev - 1));
+  };
+
+  const resetActions = () => {
+    setActionsRemaining(MAX_ACTIONS);
+  };
+
 
   return (
-    <CaseContext.Provider
-      value={{ caseData, story, caseId, setCaseData, setStory, setCaseId }}
-    >
+    <CaseContext.Provider value={{ caseData, story, caseId, setCaseData, setStory, setCaseId, actionsRemaining, decrementAction, resetActions }}>
       {children}
     </CaseContext.Provider>
   );

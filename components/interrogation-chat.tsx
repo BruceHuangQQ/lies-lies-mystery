@@ -5,6 +5,10 @@ import { type SubmitEvent, useEffect, useRef, useState } from "react";
 import { DialogueLine } from "@/components/dialogue-line";
 import { Input } from "@/components/ui/8bit/input";
 import { Spinner } from "@/components/ui/8bit/spinner";
+
+import { useCase } from "@/lib/case-context";
+
+const REPLY_DELAY_MS = 1800;
 import type { CaseData, InterrogationChatMessage } from "@/lib/types/case";
 
 type ChatLine = { id: string; speaker: string; text: string };
@@ -43,6 +47,9 @@ export function InterrogationChat({
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [storageReady, setStorageReady] = useState(false);
   const transcriptRef = useRef<HTMLDivElement>(null);
+
+  const { actionsRemaining, decrementAction } = useCase();
+  const isOutOfActions = actionsRemaining <= 0;
 
   useEffect(() => {
     setStorageReady(false);
@@ -104,6 +111,7 @@ export function InterrogationChat({
     e.preventDefault();
     const text = draft.trim();
     if (!text || isResponding) return;
+    if (actionsRemaining <= 0) return;
 
     if (!canQuery) {
       setFetchError("Case data is not loaded. Return to the case file and start again.");
@@ -121,6 +129,7 @@ export function InterrogationChat({
     setMessages(nextLines);
     setDraft("");
     setIsResponding(true);
+    decrementAction();
 
     const apiMessages = linesToApiMessages(nextLines);
 
@@ -189,9 +198,9 @@ export function InterrogationChat({
         <Input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Type what you want to say…"
           aria-label="Your message"
-          disabled={isResponding || !canQuery}
+          disabled={isResponding || isOutOfActions || !canQuery}
+          placeholder={isOutOfActions ? "No actions left - accuse the culprit." : "Type what you want to say…"}
           className="w-full shrink-0 disabled:opacity-60"
         />
         {fetchError ? (

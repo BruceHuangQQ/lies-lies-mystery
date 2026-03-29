@@ -11,6 +11,7 @@ export type CaseData = {
     personality: Personality;
     relationship: Relationship;
   }>;
+  murdererId: number;
   weapon: Weapon;
   location: Location;
   motive: Motive;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -41,8 +41,9 @@ const SUSPECT_LAYOUT = [
 export default function GamePage() {
   const router = useRouter();
   // caseData will be used to dynamically render SUSPECT and Answers
-  const { caseData, story, caseId } = useCase();
+  const { caseData, story, caseId, actionsRemaining, resetActions } = useCase();
   const storyText = story ?? caseContent.story;
+  const isOutOfActions = actionsRemaining <= 0;
 
   useEffect(() => {
     if (story === null) {
@@ -57,6 +58,28 @@ export default function GamePage() {
   const selectedSuspect =
     selectedSuspectId === null ? null : suspects.find((s) => s.id === selectedSuspectId) ?? null;
 
+  const [selectedAccusation, setSelectedAccusation] = useState<string | null>(null);
+
+  const [verdict, setVerdict] = useState<null | { status: "win" | "lose"; message: string }>(null);
+  const [showVerdictActions, setShowVerdictActions] = useState(false);
+
+  const [isSolveDialogOpen, setIsSolveDialogOpen] = useState(false);
+
+  function handleAccusation(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!selectedAccusation || !caseData) return;
+
+    const isCorrect = Number(selectedAccusation) === caseData.murdererId;
+    setVerdict({
+      status: isCorrect ? "win" : "lose",
+      message: isCorrect
+        ? "Correct \n The killer confesses under your glare."
+        : "Wrong suspect... \n The true murderer vanishes into the stormy night.",
+    });
+    setShowVerdictActions(false);
+    setIsSolveDialogOpen(false);
+    setTimeout(() => setShowVerdictActions(true), 1500);
+  }
   const selectedSuspectIndex =
     selectedSuspectId === null ? -1 : suspects.findIndex((s) => s.id === selectedSuspectId);
 
@@ -174,7 +197,14 @@ export default function GamePage() {
             </DialogContent>
           </Dialog>
 
-          <Dialog>
+          <div className="retro text-xs">
+            Actions left: {actionsRemaining}/10
+            {isOutOfActions && (
+              <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
+            )}
+          </div>
+          
+          <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
               <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
                 Solve the case
@@ -189,14 +219,12 @@ export default function GamePage() {
               </DialogHeader>
               <form
                 className="grid gap-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
+                onSubmit={handleAccusation}
               >
                 <label htmlFor="accusation" className="retro text-[10px]">
                   Who is the murderer?
                 </label>
-                <Select>
+                <Select onValueChange={setSelectedAccusation}>
                   <SelectTrigger id="accusation">
                     <SelectValue placeholder="Choose a suspect…" />
                   </SelectTrigger>
@@ -208,12 +236,62 @@ export default function GamePage() {
                     ))}
                   </SelectContent>
                 </Select>
-                <Button type="button" variant="default" className="w-full">
+                <Button type="submit" variant="default" className="w-full">
                   Submit accusation
                 </Button>
               </form>
             </DialogContent>
           </Dialog>
+
+          {verdict && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  className={cn(
+                    "retro w-full max-w-md rounded border-2 px-6 py-5 text-sm leading-relaxed shadow-2xl",
+                    verdict.status === "win"
+                      ? "border-emerald-500 bg-emerald-900/90 text-emerald-50"
+                      : "border-red-500 bg-red-900/90 text-red-50"
+                  )}
+                >
+                  <p className="text-xs uppercase tracking-[0.3em] mb-2 text-center">
+                    {verdict.status === "win" ? "Case Closed" : "Case Failed"}
+                  </p>
+                  <div className="space-y-2 text-center">
+                    {verdict.message.split("\n").map((line) => (
+                      <p key={line}>{line.trim()}</p>
+                    ))}
+                  </div>
+                  {!showVerdictActions && (
+                    <p className="mt-3 text-[10px] text-emerald-200 animate-pulse">
+                      Clearing the scene...
+                    </p>
+                  )}
+                  {showVerdictActions && (
+                    <div className="mt-4 flex flex-col gap-6">
+                      <Button
+                        variant="default"
+                        className="w-full"
+                        onClick={() => {
+                          resetActions();
+                          router.push("/file");
+                        }}
+                      >
+                        Accept new case
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        className="w-full"
+                        onClick={() => router.push("/")}
+                      >
+                        Leave the scene
+                      </Button>
+                    </div>
+                  )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
