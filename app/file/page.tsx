@@ -81,7 +81,7 @@ export default function File() {
                 aria-live="polite"
               >
                 <Spinner variant="diamond" className="size-6 text-chart-1" />
-                <span className="retro text-sm">Loading story…</span>
+                <span className="retro text-sm text-chart-1">Loading story…</span>
               </div>
             ) : error ? (
               <p className="retro text-sm text-destructive">{error}</p>
