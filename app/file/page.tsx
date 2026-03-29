@@ -49,8 +49,6 @@ export default function File() {
   const title = caseContent.title;
   const description = caseContent.description;
   const storyTitle = caseContent.storyBadge;
-  const instructionTitle = caseContent.instructionBadge;
-  const instructionDescription = caseContent.howToPlay;
 
   return (
     <section className={cn("w-full px-4 py-16")}>
@@ -68,7 +66,7 @@ export default function File() {
           </div>
         )}
 
-        <div className="grid gap-x-4 gap-y-1 md:grid-cols-2">
+        <div className="mx-auto max-w-2xl">
           <Card>
             <CardHeader className="pb-2">
               <Badge variant="destructive">{storyTitle}</Badge>
@@ -94,17 +92,6 @@ export default function File() {
               </TypewriterText>
             )}
           </CardContent>
-          </Card>
-
-          <Card className="border-primary">
-            <CardHeader className="pb-2">
-              <Badge>{instructionTitle}</Badge>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground retro text-[15px] leading-relaxed">
-                {instructionDescription}
-              </p>
-            </CardContent>
           </Card>
         </div>
 

@@ -28,7 +28,7 @@ export default function Home() {
               size="lg"
               className="cursor-pointer h-15 min-w-[200px] px-10 text-xl font-semibold bg-chart-1"
             >
-              <Link href="/file">Start game</Link>
+              <Link href="/file/how-to-play">Start game</Link>
             </Button>
           </div>
         </div>
