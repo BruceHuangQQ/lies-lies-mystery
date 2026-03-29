@@ -206,7 +206,7 @@ export default function GamePage() {
           
           <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+              <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1">
                 Solve the case
               </Button>
             </DialogTrigger>
