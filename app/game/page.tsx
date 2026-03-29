@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { InterrogationChat } from "@/components/interrogation-chat";
 import { Button } from "@/components/ui/8bit/button";
@@ -25,7 +26,6 @@ import { cn } from "@/lib/utils";
 
 import caseContent from "@/data/case-file.json";
 import { useCase } from "@/lib/case-context";
-import { useRouter } from "next/navigation";
 
 // dummy data: location, dialogue
 // will make a 'game engine' to random select SUSPECT, WEAPON, MOTIVE, LOCATION. A react hook? To pass game data into AI & this page
@@ -37,10 +37,18 @@ const SUSPECT_LAYOUT = [
 ] as const;
 
 export default function GamePage() {
+  const router = useRouter();
+  // caseData will be used to dynamically render SUSPECT and Answers
   const { caseData, story, actionsRemaining, resetActions } = useCase();
   const storyText = story ?? caseContent.story;
   const isOutOfActions = actionsRemaining <= 0;
-  
+
+  useEffect(() => {
+    if (story === null) {
+      router.replace("/");
+    }
+  }, [story, router]);
+
   const suspects = caseContent.suspects;
   const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(null);
 
@@ -51,8 +59,6 @@ export default function GamePage() {
 
   const [verdict, setVerdict] = useState<null | { status: "win" | "lose"; message: string }>(null);
   const [showVerdictActions, setShowVerdictActions] = useState(false);
-
-  const router = useRouter();
 
   const [isSolveDialogOpen, setIsSolveDialogOpen] = useState(false);
 
@@ -70,6 +76,10 @@ export default function GamePage() {
     setShowVerdictActions(false);
     setIsSolveDialogOpen(false);
     setTimeout(() => setShowVerdictActions(true), 1500);
+  }
+
+  if (story === null) {
+    return null;
   }
 
   return (
