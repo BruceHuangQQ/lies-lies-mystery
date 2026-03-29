@@ -4,6 +4,8 @@ import { Press_Start_2P } from "next/font/google";
 import "@/components/ui/8bit/styles/retro.css";
 import "./globals.css";
 
+import { CaseProvider } from "@/lib/case-context";
+
 const font8bit = Press_Start_2P({
   weight: "400",
   subsets: ["latin"],
@@ -37,7 +39,9 @@ export default function RootLayout({
         className={`${font8bit.variable} flex min-h-screen flex-col font-sans`}
         suppressHydrationWarning
       >
-        <div className="flex flex-1 flex-col">{children}</div>
+        <CaseProvider>
+          <div className="flex flex-1 flex-col">{children}</div>
+        </CaseProvider>
       </body>
     </html>
   );
