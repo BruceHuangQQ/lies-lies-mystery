@@ -3,6 +3,24 @@
   "description": "Everything you need as a detective",
   "storyBadge": "STORY",
   "story": "Victor Hale is dead.\n\nA powerful tech entrepreneur, found lifeless in his own penthouse late at night.\n\nNo forced entry. No signs of struggle. Just a quiet, calculated murder.\n\nYou arrive at the scene. Something feels off.\n\nSecurity logs confirm it—only three people had access to the penthouse that night.\n\nAnd now, they sit before you.",
-  "instructionBadge": "HOW TO PLAY",
-  "howToPlay": "Understand the case by reviewing the situation and each suspect’s background. Interrogate every suspect about alibis, motives, and relationships. Compare what they say and watch for contradictions. Pick up clues as they surface during questioning. When you are ready, make one accusation and choose a single suspect as the murderer."
+  "howToPlaySlide1": [
+    "Someone has been killed.",
+    "The scene is quiet, but something feels wrong.",
+    "A body lies before you. No witnesses. No clear answers.",
+    "Only fragments — details waiting to be noticed.",
+    "Look closely.",
+    "Every clue matters."
+  ],
+  "howToPlaySlide2": [
+    "You are the detective.",
+    "Three suspects stand before you.",
+    "Each has a story. Each hides something.",
+    "Talk to them.",
+    "Question their alibis.",
+    "Compare what they say.",
+    "Watch for contradictions.",
+    "Follow the clues.",
+    "When you are ready, make your accusation.",
+    "Choose carefully — you only get one chance."
+  ]
 }
