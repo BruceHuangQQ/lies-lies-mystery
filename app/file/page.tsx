@@ -102,7 +102,7 @@ export default function File() {
           <Button
             asChild
             size="lg"
-            className="py-6 text-lg font-semibold bg-chart-1"
+            className="py-6 text-lg font-semibold bg-chart-1 hover:bg-red-700"
           >
             <Link href="/game">Start interrogating</Link>
           </Button>

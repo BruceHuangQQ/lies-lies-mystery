@@ -51,7 +51,14 @@ export default function GamePage() {
   // caseData will be used to dynamically render SUSPECT and Answers
   const { caseData, story, caseId, actionsRemaining, resetActions, evidenceBundle, decrementAction } = useCase();
   const storyText = story ?? caseContent.story;
-  const isOutOfActions = actionsRemaining <= 0;
+
+  const actionTint = actionsRemaining > 6
+  ? "text-emerald-600"
+  : actionsRemaining > 3
+    ? "text-amber-500"
+    : actionsRemaining > 0
+      ? "text-red-500"
+      : "text-red-700";
 
   useEffect(() => {
     if (story === null) {
@@ -157,7 +164,7 @@ export default function GamePage() {
       <div className="flex justify-between w-full max-w-6xl mb-4 items-baseline">
         <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+            <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-400 text-emerald-600">
               Instructions
             </Button>
           </DialogTrigger>
@@ -200,9 +207,24 @@ export default function GamePage() {
           </DialogContent>
         </Dialog>
         <div className="retro text-xs ">
-          Actions left: {actionsRemaining}/10
-          {isOutOfActions && (
-            <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
+          {actionsRemaining > 0 ? (
+            <Button
+              variant="outline"
+              size="lg"
+              className={cn(
+                "min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-400 border",
+                actionTint,
+                actionTint.includes("red") && "border-red-400",
+                actionTint.includes("amber") && "border-amber-400",
+                actionTint.includes("emerald") && "border-emerald-400"
+              )}
+            >
+              Actions left: {actionsRemaining}/10
+            </Button>
+          ) : (
+            <p className="retro text-xs text-red-700">
+              No actions left — make your accusation.
+            </p>
           )}
         </div>
       </div>
@@ -297,22 +319,22 @@ export default function GamePage() {
         <div className="mt-5 flex w-full flex-wrap justify-between gap-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-orange-200 hover:bg-orange-300">
                 Access case file
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-orange-200">
               <DialogHeader>
-                <DialogTitle>Case file</DialogTitle>
+                <DialogTitle className="">Case file</DialogTitle>
                 <DialogDescription className="sr-only">
                   Case story
                 </DialogDescription>
               </DialogHeader>
-              <p className="retro text-muted-foreground whitespace-pre-line text-[10px] leading-relaxed">
+              <p className="retro whitespace-pre-line text-[10px] leading-relaxed">
                 {storyText}
               </p>
               <DialogClose asChild>
-                <Button variant="secondary" className="mt-2 w-full">
+                <Button variant="secondary" className="mt-2 w-full bg-red-500 text-red-50 hover:bg-red-400">
                   Close
                 </Button>
               </DialogClose>
@@ -330,7 +352,7 @@ export default function GamePage() {
               className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none max-h-[80vh] overflow-y-auto overflow-x-hidden noir-scrollbar"
             >
               <DialogHeader>
-                <DialogTitle>Police Database System - Noir</DialogTitle>
+                <DialogTitle>Noir - Database Terminal</DialogTitle>
               </DialogHeader>
               <div className="w-full p-4 space-y-4">
               <header>
@@ -371,13 +393,13 @@ export default function GamePage() {
 
           <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1">
+              <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1 hover:bg-red-700">
                 Solve the case
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Solve the case</DialogTitle>
+                <DialogTitle className="text-center">Solve the case</DialogTitle>
                 <DialogDescription className="sr-only">
                   Choose a suspect to accuse
                 </DialogDescription>
@@ -386,7 +408,7 @@ export default function GamePage() {
                 className="grid gap-4"
                 onSubmit={handleAccusation}
               >
-                <label htmlFor="accusation" className="retro text-[10px]">
+                <label htmlFor="accusation" className="retro text-[10px] text-center">
                   Who is the murderer?
                 </label>
                 <Select onValueChange={setSelectedAccusation}>
@@ -429,7 +451,7 @@ export default function GamePage() {
                     ))}
                   </div>
                   {!showVerdictActions && (
-                    <p className="mt-3 text-[10px] text-emerald-200 animate-pulse">
+                    <p className="mt-3 text-[10px] text-emerald-200 animate-pulse text-center">
                       Clearing the scene...
                     </p>
                   )}
@@ -437,7 +459,7 @@ export default function GamePage() {
                     <div className="mt-4 flex flex-col gap-6">
                       <Button
                         variant="default"
-                        className="w-full"
+                        className="w-full bg-black text-emerald-500 hover:bg-emerald-400 hover:text-black"
                         onClick={() => {
                           resetActions();
                           router.push("/file");
@@ -447,7 +469,7 @@ export default function GamePage() {
                       </Button>
                       <Button
                         variant="destructive"
-                        className="w-full"
+                        className="w-full bg-black text-red-500 hover:bg-red-400 hover:text-black"
                         onClick={() => {
                           resetActions();
                           router.push("/")

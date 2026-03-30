@@ -26,7 +26,7 @@ export default function Home() {
             <Button
               asChild
               size="lg"
-              className="cursor-pointer h-15 min-w-[200px] px-10 text-xl font-semibold bg-chart-1"
+              className="cursor-pointer h-15 min-w-[200px] px-10 text-xl font-semibold bg-chart-1 hover:bg-red-700"
             >
               <Link href="/how-to-play">Start game</Link>
             </Button>
