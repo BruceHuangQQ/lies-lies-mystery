@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 import caseContent from "@/data/case-file.json";
 import gameData from "@/data/game-data.json";
 import { useCase } from "@/lib/case-context";
-import type { Suspect } from "@/lib/types/case";
+import type { Suspect, EvidenceBundle } from "@/lib/types/case";
 
 // dummy data: location, dialogue
 // will make a 'game engine' to random select SUSPECT, WEAPON, MOTIVE, LOCATION. A react hook? To pass game data into AI & this page
@@ -38,37 +38,18 @@ const SUSPECT_LAYOUT = [
   "left-[78%] bottom-0 h-[min(68%,480px)] w-[min(24%,300px)] -translate-x-1/2",
 ] as const;
 
-const terminalActions: Record<
-  string,
-  { label: string; response: string }
-> = {
-  "1": {
-    label: "Check Security Footage",
-    response: "Security footage request queued. Awaiting retrieval...",
-  },
-  "2": {
-    label: "Analyse Weapon",
-    response: "Forensics lab notified. Weapon analysis in progress.",
-  },
-  "3": {
-    label: "View Witness Statements",
-    response: "Pulling transcripts from precinct archives...",
-  },
-  "4": {
-    label: "Access Digital Records",
-    response: "Accessing encrypted digital records node...",
-  },
-  "5": {
-    label: "Review Case Summary",
-    response: "Compiling current case summary for review.",
-  },
+const terminalActions: Record<string, { label: string; evidenceKey: keyof EvidenceBundle }> = {
+  "1": { label: "Check Security Footage", evidenceKey: "securityFootage" },
+  "2": { label: "Analyse Weapon", evidenceKey: "weaponAnalysis" },
+  "3": { label: "View Bystander Statements", evidenceKey: "bystanderStatements" },
+  "4": { label: "Access Digital Records", evidenceKey: "digitalRecords" },
 };
 
 
 export default function GamePage() {
   const router = useRouter();
   // caseData will be used to dynamically render SUSPECT and Answers
-  const { caseData, story, caseId, actionsRemaining, resetActions } = useCase();
+  const { caseData, story, caseId, actionsRemaining, resetActions, evidenceBundle } = useCase();
   const storyText = story ?? caseContent.story;
   const isOutOfActions = actionsRemaining <= 0;
 
@@ -117,16 +98,36 @@ export default function GamePage() {
     setTimeout(() => setShowVerdictActions(true), 1500);
   }
 
-  function handleTerminalInput(e: FormEvent<HTMLFormElement>) {
+  async function handleTerminalInput(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const command = terminalInput.trim();
-    const result = terminalActions[command];
-    setTerminalLog((prev) => [
-      ...prev,
-      `> ${command}`,
-      result ? result.response : "Invalid command. Enter 1-5.",
-    ]);
     setTerminalInput("");
+    setTerminalLog(prev => [...prev, `> ${command}`]);
+    
+    const action = terminalActions[command];
+    if (!action) {
+      setTerminalLog(prev => [...prev, "Invalid command. Enter 1-5."]);
+      return;
+    }
+    if (!caseData || !story) {
+      setTerminalLog(prev => [...prev, "Case data unavailable. Retry once case loads."]);
+      return;
+    }
+
+    setTerminalLog(prev => [...prev, "Processing..."]);
+
+    if (!evidenceBundle) {
+      setTerminalLog(prev => [...prev, "Evidence loading. Try again."]);
+      return;
+    }
+    const evidenceText = evidenceBundle[action.evidenceKey];
+    const noirBlock = [
+      `*** NOIR/PD-OS :: ${action.label} ***`,
+      "REPORT:",
+      ...evidenceText.map(line => `> ${line.trim()}`),
+      "STATUS: READY",
+    ].join("\n");
+    setTerminalLog(prev => [...prev.slice(0, -1), noirBlock]);
   }
 
   const selectedSuspectIndex =
@@ -265,10 +266,12 @@ export default function GamePage() {
               </Button>
             </DialogTrigger>
             <DialogContent className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none">
+              <DialogHeader>
+                <DialogTitle>Police Database System - Noir</DialogTitle>
+              </DialogHeader>
               <div className="w-full min-h-[320px] p-4 space-y-4">
               <header>
-                <p className="text-lg tracking-[0.3em] uppercase">Police Database System — Noir</p>
-                <p className="text-xs text-green-400">Type a number (1-5) and press Enter</p>
+                <p className="text-xs text-green-400">Type a number (1-4) and press Enter</p>
               </header>
               <ul className="space-y-1 text-sm">
                 {Object.entries(terminalActions).map(([key, action]) => (
@@ -277,9 +280,11 @@ export default function GamePage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 max-h-48 overflow-y-auto text-xs space-y-1">
+              <div className="mt-4 max-h-48 overflow-y-auto text-xs space-y-1 font-mono">
                 {terminalLog.map((entry, idx) => (
-                  <p key={`${entry}-${idx}`}>{entry}</p>
+                  <p key={`${entry}-${idx}`} className="whitespace-pre-wrap">
+                    {entry}
+                  </p>
                 ))}
               </div>
               <form onSubmit={handleTerminalInput} className="flex items-center gap-2">
