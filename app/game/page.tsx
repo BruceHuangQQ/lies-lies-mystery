@@ -140,7 +140,7 @@ export default function GamePage() {
     }
     const evidenceText = evidenceBundle[action.evidenceKey];
     const noirBlock = [
-      `*** NOIR/PD-OS :: ${action.label} ***`,
+      `*** DB :: ${action.label} ***`,
       "REPORT:",
       ...evidenceText.map(line => `-- ${line.trim()}`),
       "STATUS: READY",
@@ -190,9 +190,9 @@ export default function GamePage() {
               </li>
               <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
                 <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
-                  INTERACTION 2: NOIR TERMINAL
+                  INTERACTION 2: DATABASE
                 </p>
-                <p>Use the Noir database to retrieve key evidence and info. Each tool can be used only once and marks itself when spent.</p>
+                <p>Use the provided database to retrieve key evidence and info. Each tool can be used only once and marks itself when spent.</p>
               </li>
               <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
                 <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
@@ -344,15 +344,15 @@ export default function GamePage() {
           <Dialog open={isTerminalOpen} onOpenChange={setIsTerminalOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-black text-green-400 hover:bg-green-400 hover:text-black">
-                Access Noir
+                Access Database
               </Button>
             </DialogTrigger>
             <DialogContent 
               decorativeFrame={false}
               className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none max-h-[80vh] overflow-y-auto overflow-x-hidden noir-scrollbar"
             >
-              <DialogHeader>
-                <DialogTitle>Noir - Database Terminal</DialogTitle>
+              <DialogHeader className="text-center">
+                <DialogTitle>Database</DialogTitle>
               </DialogHeader>
               <div className="w-full p-4 space-y-4">
               <header>
