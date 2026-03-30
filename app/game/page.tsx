@@ -53,12 +53,12 @@ export default function GamePage() {
   const storyText = story ?? caseContent.story;
 
   const actionTint = actionsRemaining > 6
-  ? "text-emerald-600"
+  ? "text-emerald-600 hover:text-emerald-600"
   : actionsRemaining > 3
-    ? "text-amber-500"
+    ? "text-amber-500 hover:text-amber-500"
     : actionsRemaining > 0
-      ? "text-red-500"
-      : "text-red-700";
+      ? "text-red-500 hover:text-red-500"
+      : "text-red-700 hover:text-red-700";
 
   useEffect(() => {
     if (story === null) {
@@ -212,7 +212,7 @@ export default function GamePage() {
               variant="outline"
               size="lg"
               className={cn(
-                "min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-400 border",
+                "min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-200 border",
                 actionTint,
                 actionTint.includes("red") && "border-red-400",
                 actionTint.includes("amber") && "border-amber-400",
