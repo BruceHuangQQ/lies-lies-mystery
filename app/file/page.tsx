@@ -10,7 +10,7 @@ import {
   Card,
   CardContent,
   CardHeader,
-} from "@/components/ui/card";
+} from "@/components/ui/8bit/card";
 import { cn } from "@/lib/utils";
 import TypewriterText from "@/components/smoothui/typewriter-text";
 
@@ -68,7 +68,9 @@ export default function File() {
         )}
 
         <div className="mx-auto max-w-3xl">
-          <Card>
+          {/* Fixed the card length, add the new page effect */}
+          <Card className="bg-orange-200 border-zinc-400">
+            {/* grey border? */}
             <CardHeader className="pb-2">
               <Badge variant="destructive">{storyTitle}</Badge>
             </CardHeader>
@@ -86,7 +88,7 @@ export default function File() {
               <p className="retro text-sm text-destructive">{error}</p>
             ) : (
               <TypewriterText
-                className="text-muted-foreground retro whitespace-pre-line text-[15px] leading-relaxed"
+                className="whitespace-pre-line text-[15px] leading-relaxed"
                 speed={30}
               >
                 {story ?? caseContent.story}
