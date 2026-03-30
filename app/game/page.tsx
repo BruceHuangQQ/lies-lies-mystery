@@ -63,6 +63,7 @@ export default function GamePage() {
   const [verdict, setVerdict] = useState<null | { status: "win" | "lose"; message: string }>(null);
   const [showVerdictActions, setShowVerdictActions] = useState(false);
 
+  const [isIntroDialogOpen, setIsIntroDialogOpen] = useState(true);
   const [isSolveDialogOpen, setIsSolveDialogOpen] = useState(false);
 
   function handleAccusation(e: FormEvent<HTMLFormElement>) {
@@ -70,11 +71,15 @@ export default function GamePage() {
     if (!selectedAccusation || !caseData) return;
 
     const isCorrect = Number(selectedAccusation) === caseData.murdererId;
+
+    const murderer = caseData.suspects.find(
+      (entry) => entry.suspect.id === caseData.murdererId
+    );
     setVerdict({
       status: isCorrect ? "win" : "lose",
       message: isCorrect
         ? "Correct \n The killer confesses under your glare."
-        : "Wrong suspect... \n The true murderer vanishes into the stormy night.",
+        : `Wrong suspect... \n The true murderer was ${murderer?.suspect.name || "unknown"}.`,
     });
     setShowVerdictActions(false);
     setIsSolveDialogOpen(false);
@@ -111,17 +116,23 @@ export default function GamePage() {
                     aria-label={s.name}
                     onClick={() => setSelectedSuspectId(s.id)}
                     className={cn(
-                      "group absolute flex cursor-pointer items-end justify-center overflow-visible bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                      "group absolute flex flex-col items-center gap-2 cursor-pointer bg-transparent p-0 text-center",
                       SUSPECT_LAYOUT[i]
                     )}
                   >
-                    <Image
-                      src={s.image}
-                      alt=""
-                      fill
-                      sizes="(max-width: 896px) 24vw, 300px"
-                      className="object-contain object-bottom pixelated transition duration-150 ease-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:drop-shadow-md group-hover:-translate-y-0.5 group-active:scale-[0.98]"
-                    />
+                    {/* TODO make name center on top of images */}
+                    <span className="retro rounded bg-black/70 px-3 py-1 text-[10px] uppercase text-white shadow">
+                      {s.name}
+                    </span>
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={s.image}
+                        alt=""
+                        fill
+                        sizes="(max-width: 896px) 24vw, 300px"
+                        className="object-contain object-bottom pixelated transition duration-150 ease-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:drop-shadow-md group-hover:-translate-y-0.5 group-active:scale-[0.98]"
+                      />
+                    </div>
                   </button>
                 ))
               ) : (
@@ -295,6 +306,24 @@ export default function GamePage() {
               </div>
             </div>
           )}
+
+          <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
+            <DialogContent className="backdrop-blur-sm bg-black/70 text-white">
+              <DialogHeader>
+                <DialogTitle>Limited Actions</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Tutorial about action economy
+                </DialogDescription>
+              </DialogHeader>
+              <p className="retro text-sm leading-relaxed">
+                You only have 10 actions to solve this case. Every interrogation question spends 1.
+                Use them wisely before making your accusation.
+              </p>
+              <Button className="mt-4 w-full bg-emerald-500 text-emerald-950 hover:bg-emerald-400" onClick={() => setIsIntroDialogOpen(false)}>
+                Got it
+              </Button>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>
