@@ -19,7 +19,7 @@ import { StoryPayload } from "@/lib/types/case";
 import { useCase } from "@/lib/case-context";
 
 export default function File() {
-  const { setCaseData, setStory, setCaseId, story } = useCase();
+  const { setCaseData, setStory, setCaseId, story, setEvidenceBundle } = useCase();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,6 +34,7 @@ export default function File() {
         setCaseData(data.caseData);
         setStory(data.story);
         setCaseId(data.caseId);
+        setEvidenceBundle(data.evidence);
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Unknown story error";
@@ -44,7 +45,7 @@ export default function File() {
     }
 
     refreshStory();
-  }, [setCaseData, setStory, setCaseId]);
+  }, [setCaseData, setStory, setCaseId, setEvidenceBundle]);
 
   const title = caseContent.title;
   const description = caseContent.description;
