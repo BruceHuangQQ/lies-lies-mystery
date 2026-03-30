@@ -143,3 +143,21 @@
     letter-spacing: 0.5px;
   }
 }
+
+
+.noir-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.noir-scrollbar::-webkit-scrollbar-track {
+  background: #03150f; 
+}
+
+.noir-scrollbar::-webkit-scrollbar-thumb {
+  background: #34d399; 
+  border: 1px solid #052c22; 
+}
+
+.noir-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6ee7b7;
+}

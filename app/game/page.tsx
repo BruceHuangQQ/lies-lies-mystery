@@ -124,7 +124,7 @@ export default function GamePage() {
     const noirBlock = [
       `*** NOIR/PD-OS :: ${action.label} ***`,
       "REPORT:",
-      ...evidenceText.map(line => `> ${line.trim()}`),
+      ...evidenceText.map(line => `-- ${line.trim()}`),
       "STATUS: READY",
     ].join("\n");
     setTerminalLog(prev => [...prev.slice(0, -1), noirBlock]);
@@ -265,11 +265,14 @@ export default function GamePage() {
                 Access Noir
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none">
+            <DialogContent 
+              decorativeFrame={false}
+              className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none max-h-[80vh] overflow-y-auto overflow-x-hidden noir-scrollbar"
+            >
               <DialogHeader>
                 <DialogTitle>Police Database System - Noir</DialogTitle>
               </DialogHeader>
-              <div className="w-full min-h-[320px] p-4 space-y-4">
+              <div className="w-full p-4 space-y-4">
               <header>
                 <p className="text-xs text-green-400">Type a number (1-4) and press Enter</p>
               </header>
@@ -280,7 +283,7 @@ export default function GamePage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 max-h-48 overflow-y-auto text-xs space-y-1 font-mono">
+              <div className="mt-4 text-xs space-y-1 font-mono">
                 {terminalLog.map((entry, idx) => (
                   <p key={`${entry}-${idx}`} className="whitespace-pre-wrap">
                     {entry}
