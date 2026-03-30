@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LLM: Lies, Lies, Mystery
 
-## Getting Started
+## Overview
+**Lies, Lies, Mystery** is a an AI-powered interrogation game where players take on the role of a detective solving a murder case. Each game spins up a fresh victim, location, weapon, and suspects with distinct personalities, making each playthrough slightly different.
 
-First, run the development server:
+## Gameplay Loop
+1. **Interrogate Suspects** - Click on any suspect to question them, but keep in mind that each question costs one action.
+2. **Retrieve Evidence via database** – Utilise the provided database to retrieve info/evidence that can be leveraged in your interrogation. Each command is single use and also spends an action.
+3. **Accuse the Murderer** – When you’ve exhausted all actions or identified the murderer, accuse the suspect!
 
+## Architecture
+- **Frontend** – React + Next.js App Router with a custom 8-bit-style UI and music.
+- **Routing / API** – API routes for LLM integration via Groq API.
+- **AI Integration** 
+  - Backstory generation
+  - Evidence and info generation
+  - Suspect response generation
+
+## How to Run
 ```bash
+git clone https://github.com/<org>/lies-lies-mystery.git
+cd lies-lies-mystery
+cp .env.example .env.local   # add GROQ_API_KEY=<your_key> and optionally choose a different LLM 
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+Visit http://localhost:3000 to start playing!
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Future Improvements
+- Add crime scene/location exploration (like a Pokemon game) to make gameplay more engaging
+- Improve evidence system with actual items that user can discover and examine to uncover insights and add depth to gameplay
+- Introduce a clue tracking or notebook system to help players organize information
+- Improve AI memory and consistency across longer conversations
+- Explore multiplayer or competitive detective modes
