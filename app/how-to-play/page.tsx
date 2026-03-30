@@ -13,12 +13,36 @@ const ARROW_IMG = 48;
 const ARROW_BTN = "h-14 w-14 min-h-[3.5rem] min-w-[3.5rem]";
 
 export default function HowToPlayPage() {
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const typedCaseContent = caseContent as typeof caseContent & {
+    howToPlaySlide4?: string[];
+  };
 
-  const imageSrc = step === 1 ? "/crime-scene.png" : "/detective-smoking.png";
-  const imageAlt = step === 1 ? "Crime scene" : "Detective";
+  const imageSrc =
+    step === 1
+      ? "/crime-scene.png"
+      : step === 2
+        ? "/investigation.png"
+        : step === 3
+          ? "/detective-smoking.png"
+          : "/accusation.png";
+  const imageAlt =
+    step === 1
+      ? "Crime scene"
+      : step === 2
+        ? "Investigation"
+        : step === 3
+          ? "Detective"
+          : "Accusation";
 
-  const lines = step === 1 ? caseContent.howToPlaySlide1 : caseContent.howToPlaySlide2;
+  const lines =
+    step === 1
+      ? typedCaseContent.howToPlaySlide1
+      : step === 2
+        ? typedCaseContent.howToPlaySlide2
+        : step === 3
+          ? typedCaseContent.howToPlaySlide3
+          : typedCaseContent.howToPlaySlide4 ?? typedCaseContent.howToPlaySlide3;
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
@@ -64,12 +88,74 @@ export default function HowToPlayPage() {
               />
             </button>
           </div>
-        ) : (
+        ) : step === 2 ? (
           <div className="mt-5 flex w-full flex-wrap items-center justify-between gap-4">
             <button
               type="button"
               aria-label="Back"
               onClick={() => setStep(1)}
+              className={`group flex ${ARROW_BTN} shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`}
+            >
+              <Image
+                src="/arrow.png"
+                alt=""
+                width={ARROW_IMG}
+                height={ARROW_IMG}
+                className="h-auto w-auto max-h-[48px] max-w-[48px] pixelated transition duration-150 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-md group-active:scale-95"
+              />
+            </button>
+            <button
+              type="button"
+              aria-label="Next"
+              onClick={() => setStep(3)}
+              className={`group flex ${ARROW_BTN} shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`}
+            >
+              <Image
+                src="/flip-arrow.png"
+                alt=""
+                width={ARROW_IMG}
+                height={ARROW_IMG}
+                className="h-auto w-auto max-h-[48px] max-w-[48px] pixelated transition duration-150 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-md group-active:scale-95"
+              />
+            </button>
+          </div>
+        ) : step === 3 ? (
+          <div className="mt-5 flex w-full flex-wrap items-center justify-between gap-4">
+            <button
+              type="button"
+              aria-label="Back"
+              onClick={() => setStep(2)}
+              className={`group flex ${ARROW_BTN} shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`}
+            >
+              <Image
+                src="/arrow.png"
+                alt=""
+                width={ARROW_IMG}
+                height={ARROW_IMG}
+                className="h-auto w-auto max-h-[48px] max-w-[48px] pixelated transition duration-150 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-md group-active:scale-95"
+              />
+            </button>
+            <button
+              type="button"
+              aria-label="Next"
+              onClick={() => setStep(4)}
+              className={`group flex ${ARROW_BTN} shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`}
+            >
+              <Image
+                src="/flip-arrow.png"
+                alt=""
+                width={ARROW_IMG}
+                height={ARROW_IMG}
+                className="h-auto w-auto max-h-[48px] max-w-[48px] pixelated transition duration-150 ease-out group-hover:scale-110 group-hover:brightness-110 group-hover:drop-shadow-md group-active:scale-95"
+              />
+            </button>
+          </div>
+        ) : (
+          <div className="mt-5 flex w-full flex-wrap items-center justify-between gap-4">
+            <button
+              type="button"
+              aria-label="Back"
+              onClick={() => setStep(3)}
               className={`group flex ${ARROW_BTN} shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`}
             >
               <Image

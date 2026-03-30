@@ -6,12 +6,14 @@
   "howToPlaySlide1": [
     "Someone has been killed.",
     "The scene is quiet, but something feels wrong.",
-    "A body lies before you. No witnesses. No clear answers.",
+    "A body lies before you. No witnesses. No clear answers."
+  ],
+  "howToPlaySlide2": [
     "Only fragments — details waiting to be noticed.",
     "Look closely.",
     "Every clue matters."
   ],
-  "howToPlaySlide2": [
+  "howToPlaySlide3": [
     "You are the detective.",
     "Three suspects stand before you.",
     "Each has a story. Each hides something.",
@@ -19,6 +21,11 @@
     "Question their alibis.",
     "Compare what they say.",
     "Watch for contradictions.",
+    "Follow the clues.",
+    "When you are ready, make your accusation.",
+    "Choose carefully — you only get one chance."
+  ],
+  "howToPlaySlide4": [
     "Follow the clues.",
     "When you are ready, make your accusation.",
     "Choose carefully — you only get one chance."
