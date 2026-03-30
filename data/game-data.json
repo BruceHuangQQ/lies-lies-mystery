@@ -14,6 +14,26 @@
             "id": 3,
             "name": "Dan",
             "image": "/suspect/dan.png"
+        },
+        {
+            "id": 4,
+            "name": "Bob",
+            "image": "/suspect/bob.png"
+        },
+        {
+            "id": 5,
+            "name": "Lisa",
+            "image": "/suspect/lisa.png"
+        },
+        {
+            "id": 6,
+            "name": "Raha",
+            "image": "/suspect/raha.png"
+        },
+        {
+            "id": 7,
+            "name": "Sai",
+            "image": "/suspect/sai.png"
         }
     ],
     "personalities":[
@@ -85,15 +105,18 @@
     "locations": [
         {
             "id": 1,
-            "name": "Library"
+            "name": "Library",
+            "image": "/location-bg/library.png"
         },
         {
             "id": 2,
-            "name": "Garden"
+            "name": "Office",
+            "image": "/location-bg/office.jpg"
         },
         {
             "id": 3,
-            "name": "Bedroom"
+            "name": "Hospital",
+            "image": "/location-bg/hospital.png"
         }
     ],
     "motives": [

@@ -51,8 +51,8 @@ export default function GamePage() {
     }
   }, [story, router]);
 
-  // use suspect data from game data
-  const suspects = gameData.suspects as Suspect[];
+  const suspects: Suspect[] =
+    caseData?.suspects.map((row) => row.suspect) ?? (gameData.suspects as Suspect[]);
   const [selectedSuspectId, setSelectedSuspectId] = useState<number | null>(null);
 
   const selectedSuspect =
@@ -87,16 +87,17 @@ export default function GamePage() {
     return null;
   }
 
+  const locationBgSrc = caseData?.location.image ?? "/location-bg/office.jpg";
+
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
       <div className="w-full max-w-6xl bg-background">
         <div className="relative w-full">
           <div className="border-4 border-double border-sky-600 bg-sky-950/5 p-1 dark:bg-sky-950/20">
             <div className="relative aspect-video w-full overflow-hidden border-4 border-sky-700">
-              {/* TODO dynamic location */}
               <Image
-                src="/location-bg/office.png"
-                alt=""
+                src={locationBgSrc}
+                alt={caseData?.location.name ?? ""}
                 fill
                 className="object-cover pixelated"
                 priority
@@ -127,7 +128,6 @@ export default function GamePage() {
                 <div className="absolute inset-0 z-10 flex h-full w-full flex-row">
                   <div className="relative flex h-full min-h-0 flex-1 items-end justify-center">
                     <div className="relative mb-0 h-[min(68%,480px)] w-[min(42%,280px)]">
-                      {/* TODO dynamic suspect */}
                       <Image
                         src={selectedSuspect.image}
                         alt=""
