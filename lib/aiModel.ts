@@ -38,7 +38,6 @@ export async function generateStory(caseData: CaseData) {
 }
 
 
-// TODO dynamic murderer prompt
 export async function generateInterrogationReply(input: {
   story: string;
   caseData: CaseData;
@@ -52,6 +51,22 @@ export async function generateInterrogationReply(input: {
   }
 
   const { suspect, personality, relationship } = row;
+  const isMurderer = suspect.id === caseData.murdererId;
+
+  const murdererAppendix = isMurderer
+    ? `
+
+PRIVATE KNOWLEDGE (the detective does not know this — never state it as fact to them unless in-character pressure makes a confession plausible)
+- You are the killer. You know how the victim died and that the weapon and location above are tied to what happened.
+- Protect yourself: lie, omit, redirect, or show stress and slips that fit your personality — but do not casually confess or name yourself as the murderer.
+- Do not resolve the whole mystery or confirm you did it in one reply; sustained interrogation might wear you down in character.
+`
+    : "";
+
+  const innocentRule = isMurderer
+    ? ""
+    : "- You did not commit this murder. You may be wrongfully suspected, defensive, or helpful — but do not confess to killing or claim to be the murderer.\n";
+
   const system = `You are playing a character in a detective interrogation scene.
 
 CASE INTRO (what the detective already knows from the briefing):
@@ -66,10 +81,10 @@ CASE FACTS (stay consistent; do not invent contradictory details)
 - Weapon involved in the investigation: ${caseData.weapon.name} — ${caseData.weapon.description}
 - Location: ${caseData.location.name}
 - Motive thread in the case file: ${caseData.motive.description}
-
+${murdererAppendix}
 RULES
 - Reply in first person as ${suspect.name} only. Stay in character; show personality through word choice and tone.
-- You are being questioned about a murder. Be evasive, defensive, or forthcoming as fits your personality — but do not confess to the murder or resolve who did it unless the player has strong in-character reason to believe you would.
+${innocentRule}- You are being questioned about a murder. Be evasive, defensive, or forthcoming as fits your personality — but do not resolve who committed the crime for the player unless strong in-character reasons apply.
 - Keep answers to a few sentences unless the detective asks for detail.
 - No meta commentary (do not mention being an AI, a game, or "as a character").
 - Plain dialogue only: no markdown, no bullet lists.`;
