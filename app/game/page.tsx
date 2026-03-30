@@ -164,7 +164,7 @@ export default function GamePage() {
       <div className="flex justify-between w-full max-w-6xl mb-4 items-baseline">
         <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-400 text-emerald-600">
+            <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-300 text-emerald-600 hover:text-emerald-600">
               Instructions
             </Button>
           </DialogTrigger>
