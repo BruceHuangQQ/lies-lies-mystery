@@ -194,7 +194,7 @@ export default function GamePage() {
               <DialogHeader>
                 <DialogTitle>Case file</DialogTitle>
                 <DialogDescription className="sr-only">
-                  Story and how to play
+                  Case story
                 </DialogDescription>
               </DialogHeader>
               <p className="retro text-muted-foreground whitespace-pre-line text-[10px] leading-relaxed">

@@ -6,6 +6,7 @@ function useReducedMotion() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // some weird react issues - keep as is
     setShouldReduceMotion(mediaQuery.matches);
 
     const handleChange = (e: MediaQueryListEvent) => {
@@ -24,6 +25,9 @@ export interface TypewriterTextProps {
   speed?: number;
   loop?: boolean;
   className?: string;
+  // AI suggested solution - it does an action when line finishes typing
+  /** Fires once when typing finishes (not called each loop when `loop` is true). */
+  onComplete?: () => void;
 }
 
 const LOOP_RESTART_DELAY_MS = 1000;
@@ -33,6 +37,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
   speed = 50,
   loop = false,
   className = "",
+  onComplete,
 }) => {
   const [displayed, setDisplayed] = useState("");
   const index = useRef(0);
@@ -43,6 +48,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
     if (shouldReduceMotion) {
       // Show full text immediately when reduced motion is enabled
       setDisplayed(children);
+      onComplete?.();
       return;
     }
 
@@ -59,6 +65,8 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
           index.current = 0;
           type();
         }, LOOP_RESTART_DELAY_MS);
+      } else {
+        onComplete?.();
       }
     }
     type();
@@ -67,7 +75,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [children, speed, loop, shouldReduceMotion]);
+  }, [children, speed, loop, shouldReduceMotion, onComplete]);
 
   return <span className={className}>{displayed}</span>;
 };
