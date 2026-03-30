@@ -27,3 +27,8 @@ export type InterrogationChatMessage = {
   role: "user" | "assistant";
   content: string;
 };
+
+export type terminalActions = {
+  action: string;
+  response: string;
+};

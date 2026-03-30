@@ -38,6 +38,33 @@ const SUSPECT_LAYOUT = [
   "left-[78%] bottom-0 h-[min(68%,480px)] w-[min(24%,300px)] -translate-x-1/2",
 ] as const;
 
+const terminalActions: Record<
+  string,
+  { label: string; response: string }
+> = {
+  "1": {
+    label: "Check Security Footage",
+    response: "Security footage request queued. Awaiting retrieval...",
+  },
+  "2": {
+    label: "Analyse Weapon",
+    response: "Forensics lab notified. Weapon analysis in progress.",
+  },
+  "3": {
+    label: "View Witness Statements",
+    response: "Pulling transcripts from precinct archives...",
+  },
+  "4": {
+    label: "Access Digital Records",
+    response: "Accessing encrypted digital records node...",
+  },
+  "5": {
+    label: "Review Case Summary",
+    response: "Compiling current case summary for review.",
+  },
+};
+
+
 export default function GamePage() {
   const router = useRouter();
   // caseData will be used to dynamically render SUSPECT and Answers
@@ -66,6 +93,10 @@ export default function GamePage() {
   const [isIntroDialogOpen, setIsIntroDialogOpen] = useState(true);
   const [isSolveDialogOpen, setIsSolveDialogOpen] = useState(false);
 
+  const [terminalInput, setTerminalInput] = useState(""); 
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [terminalLog, setTerminalLog] = useState<string[]>([]);
+
   function handleAccusation(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selectedAccusation || !caseData) return;
@@ -85,6 +116,19 @@ export default function GamePage() {
     setIsSolveDialogOpen(false);
     setTimeout(() => setShowVerdictActions(true), 1500);
   }
+
+  function handleTerminalInput(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const command = terminalInput.trim();
+    const result = terminalActions[command];
+    setTerminalLog((prev) => [
+      ...prev,
+      `> ${command}`,
+      result ? result.response : "Invalid command. Enter 1-5.",
+    ]);
+    setTerminalInput("");
+  }
+
   const selectedSuspectIndex =
     selectedSuspectId === null ? -1 : suspects.findIndex((s) => s.id === selectedSuspectId);
 
@@ -214,9 +258,43 @@ export default function GamePage() {
             </DialogContent>
           </Dialog>
 
-          <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
-            Access Noir
-          </Button>
+          <Dialog open={isTerminalOpen} onOpenChange={setIsTerminalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+                Access Noir
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none">
+              <div className="w-full min-h-[320px] p-4 space-y-4">
+              <header>
+                <p className="text-lg tracking-[0.3em] uppercase">Police Database System — Noir</p>
+                <p className="text-xs text-green-400">Type a number (1-5) and press Enter</p>
+              </header>
+              <ul className="space-y-1 text-sm">
+                {Object.entries(terminalActions).map(([key, action]) => (
+                  <li key={key}>
+                    {key} - {action.label}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4 max-h-48 overflow-y-auto text-xs space-y-1">
+                {terminalLog.map((entry, idx) => (
+                  <p key={`${entry}-${idx}`}>{entry}</p>
+                ))}
+              </div>
+              <form onSubmit={handleTerminalInput} className="flex items-center gap-2">
+                <span>&gt;</span>
+                <input
+                  value={terminalInput}
+                  onChange={(e) => setTerminalInput(e.target.value)}
+                  className="flex-1 bg-transparent border-b border-green-500 focus:outline-none"
+                  autoFocus
+                />
+              </form>
+            </div>
+            </DialogContent>
+          </Dialog>
+
           <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
               <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1">
