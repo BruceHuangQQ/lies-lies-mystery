@@ -154,12 +154,59 @@ export default function GamePage() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
-      <div className="retro text-xs">
-        Actions left: {actionsRemaining}/10
-        {isOutOfActions && (
-          <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
-        )}
+      <div className="flex justify-between w-full max-w-6xl mb-4 items-baseline">
+        <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+              Instructions
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="backdrop-blur-sm bg-black/70 text-white max-w-none sm:max-w-[900px] w-[95vw]">
+            <DialogHeader>
+              <DialogTitle className="text-center">Instructions</DialogTitle>
+              <DialogDescription className="sr-only">
+                Tutorial about action economy
+              </DialogDescription>
+            </DialogHeader>
+            <ul className="grid gap-3 text-xs text-emerald-100">
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  GOAL
+                </p>
+                <p>Identify the killer before your actions run out.</p>
+              </li>
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  INTERACTION 1: INTERROGATION
+                </p>
+                <p>Click on each suspect to interrogate them and pay attention to their responses. Each question asked will consume 1 action.</p>
+              </li>
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  INTERACTION 2: NOIR TERMINAL
+                </p>
+                <p>Use the Noir database to retrieve key evidence and info. Each tool can be used only once and marks itself when spent.</p>
+              </li>
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  FINAL MOVE
+                </p>
+                <p>You only have <strong>10</strong> actions. When you run out of actions, make your accusation!</p>
+              </li>
+            </ul>
+            <Button className="mt-4 w-full bg-emerald-500 text-emerald-950 hover:bg-emerald-400" onClick={() => setIsIntroDialogOpen(false)}>
+              Got it
+            </Button>
+          </DialogContent>
+        </Dialog>
+        <div className="retro text-xs ">
+          Actions left: {actionsRemaining}/10
+          {isOutOfActions && (
+            <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
+          )}
+        </div>
       </div>
+
       <div className="w-full max-w-6xl bg-background">
         <div className="relative w-full">
           <div className="border-4 border-double border-sky-600 bg-sky-950/5 p-1 dark:bg-sky-950/20">
@@ -274,7 +321,7 @@ export default function GamePage() {
 
           <Dialog open={isTerminalOpen} onOpenChange={setIsTerminalOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-black text-green-400 hover:bg-green-400 hover:text-black">
                 Access Noir
               </Button>
             </DialogTrigger>
@@ -413,24 +460,6 @@ export default function GamePage() {
               </div>
             </div>
           )}
-
-          <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
-            <DialogContent className="backdrop-blur-sm bg-black/70 text-white">
-              <DialogHeader>
-                <DialogTitle>Limited Actions</DialogTitle>
-                <DialogDescription className="sr-only">
-                  Tutorial about action economy
-                </DialogDescription>
-              </DialogHeader>
-              <p className="retro text-sm leading-relaxed">
-                You only have 10 actions to solve this case. Every interrogation question spends 1.
-                Use them wisely before making your accusation.
-              </p>
-              <Button className="mt-4 w-full bg-emerald-500 text-emerald-950 hover:bg-emerald-400" onClick={() => setIsIntroDialogOpen(false)}>
-                Got it
-              </Button>
-            </DialogContent>
-          </Dialog>
         </div>
       </div>
     </div>
