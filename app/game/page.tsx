@@ -96,6 +96,12 @@ export default function GamePage() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
+      <div className="retro text-xs">
+        Actions left: {actionsRemaining}/10
+        {isOutOfActions && (
+          <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
+        )}
+      </div>
       <div className="w-full max-w-6xl bg-background">
         <div className="relative w-full">
           <div className="border-4 border-double border-sky-600 bg-sky-950/5 p-1 dark:bg-sky-950/20">
@@ -208,13 +214,9 @@ export default function GamePage() {
             </DialogContent>
           </Dialog>
 
-          <div className="retro text-xs">
-            Actions left: {actionsRemaining}/10
-            {isOutOfActions && (
-              <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
-            )}
-          </div>
-          
+          <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+            Access Noir
+          </Button>
           <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
               <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1">
