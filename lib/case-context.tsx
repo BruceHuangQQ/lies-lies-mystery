@@ -1,13 +1,15 @@
 "use client";
 
 import React, { createContext, useState, useContext } from 'react';
-import type { CaseData } from './types/case';
+import type { CaseData, EvidenceBundle } from './types/case';
 
 interface CaseState {
   caseData: CaseData | null;
   story: string | null;
   actionsRemaining: number;
   caseId: string | null;
+  evidenceBundle: EvidenceBundle | null;
+  setEvidenceBundle: (evidence: EvidenceBundle | null) => void;
   setCaseId: (caseId: string | null) => void;
   setCaseData: (caseData: CaseData | null) => void;
   setStory: (story: string | null) => void;
@@ -24,6 +26,7 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
   const [story, setStory] = useState<string | null>(null);
   const [actionsRemaining, setActionsRemaining] = useState<number>(MAX_ACTIONS);
   const [caseId, setCaseId] = useState<string | null>(null);
+  const [evidenceBundle, setEvidenceBundle] = useState<EvidenceBundle | null>(null);
   
   const decrementAction = () => {
     setActionsRemaining((prev) => Math.max(0, prev - 1));
@@ -35,7 +38,7 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
 
 
   return (
-    <CaseContext.Provider value={{ caseData, story, caseId, setCaseData, setStory, setCaseId, actionsRemaining, decrementAction, resetActions }}>
+    <CaseContext.Provider value={{ caseData, story, caseId, evidenceBundle, setCaseData, setStory, setCaseId, setEvidenceBundle, actionsRemaining, decrementAction, resetActions }}>
       {children}
     </CaseContext.Provider>
   );

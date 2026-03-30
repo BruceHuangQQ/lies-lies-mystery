@@ -32,7 +32,9 @@ const DialogFooter = ShadcnDialogFooter;
 
 export interface BitDialogProps
   extends React.ComponentProps<"div">,
-    VariantProps<typeof dialogContentVariants> {}
+    VariantProps<typeof dialogContentVariants> {
+      decorativeFrame?: boolean;
+    }
 
 function DialogTitle({ className, font, ...props }: BitDialogProps) {
   return (
@@ -59,6 +61,7 @@ function DialogContent({
   className,
   children,
   font,
+  decorativeFrame = true,
   ...props
 }: BitDialogProps) {
   return (
@@ -72,14 +75,18 @@ function DialogContent({
     >
       {children}
 
-      <div
-        className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute inset-0 border-y-6 -my-1.5 border-foreground dark:border-ring pointer-events-none"
-        aria-hidden="true"
-      />
+      {decorativeFrame && (
+        <>
+          <div
+            className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-0 border-y-6 -my-1.5 border-foreground dark:border-ring pointer-events-none"
+            aria-hidden="true"
+          />
+        </>
+      )}
     </ShadcnDialogContent>
   );
 }

@@ -21,9 +21,17 @@ export type StoryPayload = {
   caseData: CaseData;
   story: string;
   caseId: string;
+  evidence: EvidenceBundle;
 };
 
 export type InterrogationChatMessage = {
   role: "user" | "assistant";
   content: string;
+};
+
+export type EvidenceBundle = {
+  securityFootage: string[];
+  weaponAnalysis: string[];
+  bystanderStatements: string[];
+  digitalRecords: string[];
 };

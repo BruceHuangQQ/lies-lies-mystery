@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 import caseContent from "@/data/case-file.json";
 import gameData from "@/data/game-data.json";
 import { useCase } from "@/lib/case-context";
-import type { Suspect } from "@/lib/types/case";
+import type { Suspect, EvidenceBundle } from "@/lib/types/case";
 
 // dummy data: location, dialogue
 // will make a 'game engine' to random select SUSPECT, WEAPON, MOTIVE, LOCATION. A react hook? To pass game data into AI & this page
@@ -38,12 +38,27 @@ const SUSPECT_LAYOUT = [
   "left-[78%] bottom-0 h-[min(68%,480px)] w-[min(24%,300px)] -translate-x-1/2",
 ] as const;
 
+const terminalActions: Record<string, { label: string; evidenceKey: keyof EvidenceBundle }> = {
+  "1": { label: "Check Security Footage", evidenceKey: "securityFootage" },
+  "2": { label: "Analyse Weapon", evidenceKey: "weaponAnalysis" },
+  "3": { label: "View Bystander Statements", evidenceKey: "bystanderStatements" },
+  "4": { label: "Access Digital Records", evidenceKey: "digitalRecords" },
+};
+
+
 export default function GamePage() {
   const router = useRouter();
   // caseData will be used to dynamically render SUSPECT and Answers
-  const { caseData, story, caseId, actionsRemaining, resetActions } = useCase();
+  const { caseData, story, caseId, actionsRemaining, resetActions, evidenceBundle, decrementAction } = useCase();
   const storyText = story ?? caseContent.story;
-  const isOutOfActions = actionsRemaining <= 0;
+
+  const actionTint = actionsRemaining > 6
+  ? "text-emerald-600"
+  : actionsRemaining > 3
+    ? "text-amber-500"
+    : actionsRemaining > 0
+      ? "text-red-500"
+      : "text-red-700";
 
   useEffect(() => {
     if (story === null) {
@@ -66,6 +81,11 @@ export default function GamePage() {
   const [isIntroDialogOpen, setIsIntroDialogOpen] = useState(true);
   const [isSolveDialogOpen, setIsSolveDialogOpen] = useState(false);
 
+  const [terminalInput, setTerminalInput] = useState(""); 
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [terminalLog, setTerminalLog] = useState<string[]>([]);
+  const [usedTerminalActions, setUsedTerminalActions] = useState<Record<string, boolean>>({});
+
   function handleAccusation(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selectedAccusation || !caseData) return;
@@ -85,6 +105,51 @@ export default function GamePage() {
     setIsSolveDialogOpen(false);
     setTimeout(() => setShowVerdictActions(true), 1500);
   }
+
+  async function handleTerminalInput(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const command = terminalInput.trim();
+    setTerminalInput("");
+    setTerminalLog(prev => [...prev, `> ${command}`]);
+    
+    if (usedTerminalActions[command]) {
+      setTerminalLog(prev => [...prev, "Command already spent. Choose another."]);
+      return;
+    }
+
+    if (actionsRemaining <= 0) {
+      setTerminalLog(prev => [...prev, "No actions left. Make your accusation."]);
+      return;
+    }
+
+    const action = terminalActions[command];
+    if (!action) {
+      setTerminalLog(prev => [...prev, "Invalid command. Enter 1-5."]);
+      return;
+    }
+    if (!caseData || !story) {
+      setTerminalLog(prev => [...prev, "Case data unavailable. Retry once case loads."]);
+      return;
+    }
+
+    setTerminalLog(prev => [...prev, "Processing..."]);
+
+    if (!evidenceBundle) {
+      setTerminalLog(prev => [...prev, "Evidence loading. Try again."]);
+      return;
+    }
+    const evidenceText = evidenceBundle[action.evidenceKey];
+    const noirBlock = [
+      `*** NOIR/PD-OS :: ${action.label} ***`,
+      "REPORT:",
+      ...evidenceText.map(line => `-- ${line.trim()}`),
+      "STATUS: READY",
+    ].join("\n");
+    setTerminalLog(prev => [...prev.slice(0, -1), noirBlock]);
+    setUsedTerminalActions(prev => ({ ...prev, [command]: true }));
+    decrementAction();
+  }
+
   const selectedSuspectIndex =
     selectedSuspectId === null ? -1 : suspects.findIndex((s) => s.id === selectedSuspectId);
 
@@ -96,6 +161,74 @@ export default function GamePage() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
+      <div className="flex justify-between w-full max-w-6xl mb-4 items-baseline">
+        <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-400 text-emerald-600">
+              Instructions
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="backdrop-blur-sm bg-black/70 text-white max-w-none sm:max-w-[900px] w-[95vw]">
+            <DialogHeader>
+              <DialogTitle className="text-center">Instructions</DialogTitle>
+              <DialogDescription className="sr-only">
+                Tutorial about action economy
+              </DialogDescription>
+            </DialogHeader>
+            <ul className="grid gap-3 text-xs text-emerald-100">
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  GOAL
+                </p>
+                <p>Identify the killer before your actions run out.</p>
+              </li>
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  INTERACTION 1: INTERROGATION
+                </p>
+                <p>Click on each suspect to interrogate them and pay attention to their responses. Each question asked will consume 1 action.</p>
+              </li>
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  INTERACTION 2: NOIR TERMINAL
+                </p>
+                <p>Use the Noir database to retrieve key evidence and info. Each tool can be used only once and marks itself when spent.</p>
+              </li>
+              <li className="bg-black/30 border border-emerald-400/40 rounded px-3 py-2">
+                <p className="font-semibold tracking-[0.2em] text-[12px] text-emerald-300 mb-2">
+                  FINAL MOVE
+                </p>
+                <p>You only have <strong>10</strong> actions. When you run out of actions, make your accusation!</p>
+              </li>
+            </ul>
+            <Button className="mt-4 w-full bg-emerald-500 text-emerald-950 hover:bg-emerald-400" onClick={() => setIsIntroDialogOpen(false)}>
+              Got it
+            </Button>
+          </DialogContent>
+        </Dialog>
+        <div className="retro text-xs ">
+          {actionsRemaining > 0 ? (
+            <Button
+              variant="outline"
+              size="lg"
+              className={cn(
+                "min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-400 border",
+                actionTint,
+                actionTint.includes("red") && "border-red-400",
+                actionTint.includes("amber") && "border-amber-400",
+                actionTint.includes("emerald") && "border-emerald-400"
+              )}
+            >
+              Actions left: {actionsRemaining}/10
+            </Button>
+          ) : (
+            <p className="retro text-xs text-red-700">
+              No actions left — make your accusation.
+            </p>
+          )}
+        </div>
+      </div>
+
       <div className="w-full max-w-6xl bg-background">
         <div className="relative w-full">
           <div className="border-4 border-double border-sky-600 bg-sky-950/5 p-1 dark:bg-sky-950/20">
@@ -186,44 +319,87 @@ export default function GamePage() {
         <div className="mt-5 flex w-full flex-wrap justify-between gap-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm">
+              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-orange-200 hover:bg-orange-300">
                 Access case file
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-orange-200">
               <DialogHeader>
-                <DialogTitle>Case file</DialogTitle>
+                <DialogTitle className="">Case file</DialogTitle>
                 <DialogDescription className="sr-only">
                   Case story
                 </DialogDescription>
               </DialogHeader>
-              <p className="retro text-muted-foreground whitespace-pre-line text-[10px] leading-relaxed">
+              <p className="retro whitespace-pre-line text-[10px] leading-relaxed">
                 {storyText}
               </p>
               <DialogClose asChild>
-                <Button variant="secondary" className="mt-2 w-full">
+                <Button variant="secondary" className="mt-2 w-full bg-red-500 text-red-50 hover:bg-red-400">
                   Close
                 </Button>
               </DialogClose>
             </DialogContent>
           </Dialog>
 
-          <div className="retro text-xs">
-            Actions left: {actionsRemaining}/10
-            {isOutOfActions && (
-              <p className="retro text-xs text-destructive">No actions left — make your accusation.</p>
-            )}
-          </div>
-          
+          <Dialog open={isTerminalOpen} onOpenChange={setIsTerminalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-black text-green-400 hover:bg-green-400 hover:text-black">
+                Access Noir
+              </Button>
+            </DialogTrigger>
+            <DialogContent 
+              decorativeFrame={false}
+              className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none max-h-[80vh] overflow-y-auto overflow-x-hidden noir-scrollbar"
+            >
+              <DialogHeader>
+                <DialogTitle>Noir - Database Terminal</DialogTitle>
+              </DialogHeader>
+              <div className="w-full p-4 space-y-4">
+              <header>
+                <p className="text-xs text-green-400">Type a number (1-4) and press Enter</p>
+              </header>
+              <ul className="space-y-1 text-sm">
+                {Object.entries(terminalActions).map(([key, action]) => (
+                  <li
+                    key={key}
+                    className={cn(
+                      "transition text-sm",
+                      usedTerminalActions[key] && "line-through text-green-900/60"
+                    )}
+                  >
+                    {key} - {action.label}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4 text-xs space-y-1 font-mono">
+                {terminalLog.map((entry, idx) => (
+                  <p key={`${entry}-${idx}`} className="whitespace-pre-wrap">
+                    {entry}
+                  </p>
+                ))}
+              </div>
+              <form onSubmit={handleTerminalInput} className="flex items-center gap-2">
+                <span>&gt;</span>
+                <input
+                  value={terminalInput}
+                  onChange={(e) => setTerminalInput(e.target.value)}
+                  className="flex-1 bg-transparent border-b border-green-500 focus:outline-none"
+                  autoFocus
+                />
+              </form>
+            </div>
+            </DialogContent>
+          </Dialog>
+
           <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1">
+              <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1 hover:bg-red-700">
                 Solve the case
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Solve the case</DialogTitle>
+                <DialogTitle className="text-center">Solve the case</DialogTitle>
                 <DialogDescription className="sr-only">
                   Choose a suspect to accuse
                 </DialogDescription>
@@ -232,7 +408,7 @@ export default function GamePage() {
                 className="grid gap-4"
                 onSubmit={handleAccusation}
               >
-                <label htmlFor="accusation" className="retro text-[10px]">
+                <label htmlFor="accusation" className="retro text-[10px] text-center">
                   Who is the murderer?
                 </label>
                 <Select onValueChange={setSelectedAccusation}>
@@ -275,7 +451,7 @@ export default function GamePage() {
                     ))}
                   </div>
                   {!showVerdictActions && (
-                    <p className="mt-3 text-[10px] text-emerald-200 animate-pulse">
+                    <p className="mt-3 text-[10px] text-emerald-200 animate-pulse text-center">
                       Clearing the scene...
                     </p>
                   )}
@@ -283,7 +459,7 @@ export default function GamePage() {
                     <div className="mt-4 flex flex-col gap-6">
                       <Button
                         variant="default"
-                        className="w-full"
+                        className="w-full bg-black text-emerald-500 hover:bg-emerald-400 hover:text-black"
                         onClick={() => {
                           resetActions();
                           router.push("/file");
@@ -293,7 +469,7 @@ export default function GamePage() {
                       </Button>
                       <Button
                         variant="destructive"
-                        className="w-full"
+                        className="w-full bg-black text-red-500 hover:bg-red-400 hover:text-black"
                         onClick={() => {
                           resetActions();
                           router.push("/")
@@ -306,24 +482,6 @@ export default function GamePage() {
               </div>
             </div>
           )}
-
-          <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
-            <DialogContent className="backdrop-blur-sm bg-black/70 text-white">
-              <DialogHeader>
-                <DialogTitle>Limited Actions</DialogTitle>
-                <DialogDescription className="sr-only">
-                  Tutorial about action economy
-                </DialogDescription>
-              </DialogHeader>
-              <p className="retro text-sm leading-relaxed">
-                You only have 10 actions to solve this case. Every interrogation question spends 1.
-                Use them wisely before making your accusation.
-              </p>
-              <Button className="mt-4 w-full bg-emerald-500 text-emerald-950 hover:bg-emerald-400" onClick={() => setIsIntroDialogOpen(false)}>
-                Got it
-              </Button>
-            </DialogContent>
-          </Dialog>
         </div>
       </div>
     </div>

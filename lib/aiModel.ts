@@ -2,6 +2,7 @@ import Groq from "groq-sdk";
 
 import type {
   CaseData,
+  EvidenceBundle,
   InterrogationChatMessage,
 } from "@/lib/types/case";
 
@@ -24,7 +25,7 @@ export async function generateStory(caseData: CaseData) {
         - Middle: briefly highlight each suspect's demeanor (personality) and relationship to the victim. Do not reveal the murderer and the motive.
         - Closing sentence: a cinematic call-to-action for the detective.
         - IMPORTANT: Format as plain text with newline breaks between paragraphs, no markdown, no lists.
-        - Keep it under 150 words.
+        - IMPORTANT: Keep it under 150 words.
         - Do NOT add new facts.
         - Do NOT contradict any details.
         - Keep it family-friendly`,
@@ -35,6 +36,68 @@ export async function generateStory(caseData: CaseData) {
   });
 
   return completion.choices[0]?.message?.content?.trim() ?? "";
+}
+
+export async function generateCaseEvidence(input: {
+  caseData: CaseData;
+  story: string;
+}): Promise<EvidenceBundle> {
+  const payload = {
+    story: input.story,
+    case: {
+      weapon: input.caseData.weapon,
+      location: input.caseData.location,
+      motive: input.caseData.motive,
+      suspects: input.caseData.suspects.map(({ suspect, personality, relationship }) => ({
+        id: suspect.id,
+        name: suspect.name,
+        personality: personality.personality,
+        relationship: relationship.relationship,
+      })),
+    },
+  };
+
+  const completion = await groq.chat.completions.create({
+    model: process.env.GROQ_MODEL ?? "mixtral-8x7b-instruct",
+    temperature: 0.4,
+    max_tokens: 350,
+    messages: [
+      {
+        role: "system",
+        content: [
+          "You are a precinct analyst compiling canonical evidence summaries.",
+          "- Output valid JSON ONLY. No prose, markdown, or commentary.",
+          "- Schema:",
+          '  {',
+          '    "securityFootage": ["sentence", "sentence"],',
+          '    "weaponAnalysis": ["sentence", "sentence"],',
+          '    "bystanderStatements": ["sentence", "sentence"],',
+          '    "digitalRecords": ["sentence", "sentence"]',
+          '  }',
+          "- Each array must contain 1-2 short sentences derived strictly from the case/story.",
+          "- bystanderStatements must come from neutral bystanders who observed or overheard a suspect's whereabouts (e.g., coworkers, clerks, bartenders, maids).",
+          "- Do NOT fabricate confessions, detectives, or unnamed “sources”; each witness must plausibly exist in the same venue as the suspects.",
+          "Format each bystander entry as <Bystander name>, a <role>, reports that <suspect name> was <observable action> at <time/location>.",
+          "- Bystanders describe what they saw or heard; they never confess, accuse, or speak in first person."
+        ].join("\n"),
+      },
+      {
+        role: "user",
+        content: [
+          "Build the evidence bundle for this case:",
+          JSON.stringify(payload, null, 2),
+        ].join("\n"),
+      },
+    ],
+  });
+
+  const parsed = JSON.parse(completion.choices[0]?.message?.content ?? "{}") as Record<keyof EvidenceBundle, string[]>;
+  return {
+    securityFootage: parsed.securityFootage,
+    weaponAnalysis: parsed.weaponAnalysis,
+    bystanderStatements: parsed.bystanderStatements,
+    digitalRecords: parsed.digitalRecords,
+  };
 }
 
 
