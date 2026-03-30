@@ -49,7 +49,7 @@ const terminalActions: Record<string, { label: string; evidenceKey: keyof Eviden
 export default function GamePage() {
   const router = useRouter();
   // caseData will be used to dynamically render SUSPECT and Answers
-  const { caseData, story, caseId, actionsRemaining, resetActions, evidenceBundle } = useCase();
+  const { caseData, story, caseId, actionsRemaining, resetActions, evidenceBundle, decrementAction } = useCase();
   const storyText = story ?? caseContent.story;
   const isOutOfActions = actionsRemaining <= 0;
 
@@ -77,6 +77,7 @@ export default function GamePage() {
   const [terminalInput, setTerminalInput] = useState(""); 
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [terminalLog, setTerminalLog] = useState<string[]>([]);
+  const [usedTerminalActions, setUsedTerminalActions] = useState<Record<string, boolean>>({});
 
   function handleAccusation(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -104,6 +105,16 @@ export default function GamePage() {
     setTerminalInput("");
     setTerminalLog(prev => [...prev, `> ${command}`]);
     
+    if (usedTerminalActions[command]) {
+      setTerminalLog(prev => [...prev, "Command already spent. Choose another."]);
+      return;
+    }
+
+    if (actionsRemaining <= 0) {
+      setTerminalLog(prev => [...prev, "No actions left. Make your accusation."]);
+      return;
+    }
+
     const action = terminalActions[command];
     if (!action) {
       setTerminalLog(prev => [...prev, "Invalid command. Enter 1-5."]);
@@ -128,6 +139,8 @@ export default function GamePage() {
       "STATUS: READY",
     ].join("\n");
     setTerminalLog(prev => [...prev.slice(0, -1), noirBlock]);
+    setUsedTerminalActions(prev => ({ ...prev, [command]: true }));
+    decrementAction();
   }
 
   const selectedSuspectIndex =
@@ -278,7 +291,13 @@ export default function GamePage() {
               </header>
               <ul className="space-y-1 text-sm">
                 {Object.entries(terminalActions).map(([key, action]) => (
-                  <li key={key}>
+                  <li
+                    key={key}
+                    className={cn(
+                      "transition text-sm",
+                      usedTerminalActions[key] && "line-through text-green-900/60"
+                    )}
+                  >
                     {key} - {action.label}
                   </li>
                 ))}
