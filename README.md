@@ -1,5 +1,5 @@
 # LLM: Lies, Lies, Mystery
-<img width="785" height="501" alt="image" src="https://github.com/user-attachments/assets/3ac5047f-dbef-4b61-9e26-295eaf43326f" />
+[![LLM](https://github.com/user-attachments/assets/3ac5047f-dbef-4b61-9e26-295eaf43326f)](https://www.youtube.com/watch?v=gGDYwaV1RF0)
 
 ## Overview
 **Lies, Lies, Mystery** is a an AI-powered interrogation game where players take on the role of a detective solving a murder case. Each game spins up a fresh victim, location, weapon, and suspects with distinct personalities, making each playthrough slightly different.
