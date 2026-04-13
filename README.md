@@ -1,5 +1,5 @@
 # LLM: Lies, Lies, Mystery
-
+[![Watch the video](https://img.youtube.com/vi/gGDYwaV1RF0/0.jpg)](https://www.youtube.com/watch?v=gGDYwaV1RF0)
 ## Overview
 **Lies, Lies, Mystery** is a an AI-powered interrogation game where players take on the role of a detective solving a murder case. Each game spins up a fresh victim, location, weapon, and suspects with distinct personalities, making each playthrough slightly different.
 
