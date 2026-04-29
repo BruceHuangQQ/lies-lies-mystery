@@ -14,6 +14,7 @@ export function MusicToggle() {
 
   const enabledRef = useRef(enabled);
   const hasTriedUnmuteRef = useRef(false);
+  const userInitiatedEnableRef = useRef(false);
 
   useEffect(() => {
     enabledRef.current = enabled;
@@ -29,6 +30,19 @@ export function MusicToggle() {
       el.pause();
       el.currentTime = 0;
       hasTriedUnmuteRef.current = false;
+      userInitiatedEnableRef.current = false;
+      return;
+    }
+
+    // If user just toggled music ON, this callback is already in a user gesture.
+    // Keep it unmuted and play immediately instead of switching to muted autoplay flow.
+    if (userInitiatedEnableRef.current) {
+      userInitiatedEnableRef.current = false;
+      el.loop = true;
+      el.muted = false;
+      void el.play().catch(() => {
+        // Best effort; if this fails, the next gesture can recover playback.
+      });
       return;
     }
 
@@ -51,7 +65,6 @@ export function MusicToggle() {
         if (!enabledRef.current) return;
 
         cur.muted = false;
-        cur.currentTime = 0;
         cur.loop = true;
         void cur.play().catch(() => {
           // If unmute fails, we keep the audio muted but playing (best effort).
@@ -76,6 +89,7 @@ export function MusicToggle() {
     }
 
     // Toggle click is a user gesture: try unmuted playback immediately.
+    userInitiatedEnableRef.current = true;
     hasTriedUnmuteRef.current = false;
     el.loop = true;
     el.currentTime = 0;
