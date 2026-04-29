@@ -52,27 +52,27 @@ export default function File() {
   const storyTitle = caseContent.storyBadge;
 
   return (
-    <section className={cn("w-full px-4 py-16")}>
+    <section className={cn("w-full px-4 py-10 sm:py-16")}>
       <div className="mx-auto w-full max-w-7xl">
         {(title || description) && (
           <div className="mb-10 text-center">
             {title && (
-              <h2 className="retro mb-3 font-bold text-2xl tracking-tight md:text-3xl">
+              <h2 className="retro mb-3 text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
                 {title}
               </h2>
             )}
             {description && (
-              <p className="retro text-muted-foreground text-[9px]">{description}</p>
+              <p className="retro text-muted-foreground text-[8px] sm:text-[9px]">{description}</p>
             )}
           </div>
         )}
 
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-2xl sm:max-w-3xl">
           {/* Fixed the card length, add the new page effect */}
           <Card className="bg-orange-200 border-zinc-400">
             {/* grey border? */}
-            <CardHeader className="pb-2">
-              <Badge variant="destructive">{storyTitle}</Badge>
+            <CardHeader className="pb-1 sm:pb-2">
+              <Badge variant="destructive" className="text-[10px] sm:text-xs">{storyTitle}</Badge>
             </CardHeader>
             <CardContent>
             {loading ? (
@@ -88,7 +88,7 @@ export default function File() {
               <p className="retro text-sm text-destructive">{error}</p>
             ) : (
               <TypewriterText
-                className="whitespace-pre-line text-[15px] leading-relaxed"
+                className="whitespace-pre-line text-[12px] leading-relaxed sm:text-[15px]"
                 speed={30}
               >
                 {story ?? caseContent.story}
@@ -102,7 +102,7 @@ export default function File() {
           <Button
             asChild
             size="lg"
-            className="py-6 text-lg font-semibold bg-chart-1 hover:bg-red-700"
+            className="w-full px-4 py-3 text-sm font-semibold bg-chart-1 hover:bg-red-700 sm:w-auto sm:py-6 sm:text-lg"
           >
             <Link href="/game">Start interrogating</Link>
           </Button>

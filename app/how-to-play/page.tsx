@@ -169,7 +169,7 @@ export default function HowToPlayPage() {
             <Button
               asChild
               size="lg"
-              className="min-w-[12rem] px-6 py-5 text-sm bg-chart-1 hover:bg-red-700"
+              className="w-full min-w-0 bg-chart-1 px-4 py-3 text-xs hover:bg-red-700 sm:w-auto sm:min-w-[12rem] sm:px-6 sm:py-5 sm:text-sm"
             >
               <Link href="/file">Open case file</Link>
             </Button>

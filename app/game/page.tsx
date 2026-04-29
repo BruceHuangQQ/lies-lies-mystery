@@ -161,10 +161,10 @@ export default function GamePage() {
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-3 py-6 sm:px-4">
-      <div className="flex justify-between w-full max-w-6xl mb-4 items-baseline">
+      <div className="mb-4 flex w-full max-w-6xl flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
         <Dialog open={isIntroDialogOpen} onOpenChange={setIsIntroDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-300 text-emerald-600 hover:text-emerald-600">
+            <Button variant="outline" size="lg" className="w-full min-w-0 bg-zinc-200 px-3 py-2 text-xs text-emerald-600 hover:bg-zinc-300 hover:text-emerald-600 sm:w-auto sm:min-w-[10rem] sm:px-6 sm:py-5 sm:text-sm">
               Instructions
             </Button>
           </DialogTrigger>
@@ -206,13 +206,13 @@ export default function GamePage() {
             </Button>
           </DialogContent>
         </Dialog>
-        <div className="retro text-xs ">
+        <div className="retro text-xs">
           {actionsRemaining > 0 ? (
             <Button
               variant="outline"
               size="lg"
               className={cn(
-                "min-w-[10rem] px-6 py-5 text-sm bg-zinc-200 hover:bg-zinc-200 border",
+                "w-full min-w-0 border bg-zinc-200 px-3 py-2 text-xs hover:bg-zinc-200 sm:w-auto sm:min-w-[10rem] sm:px-6 sm:py-5 sm:text-sm",
                 actionTint,
                 actionTint.includes("red") && "border-red-400",
                 actionTint.includes("amber") && "border-amber-400",
@@ -271,7 +271,7 @@ export default function GamePage() {
               ) : (
                 <div className="absolute inset-0 z-10 flex h-full w-full flex-row">
                   <div className="relative flex h-full min-h-0 flex-1 items-end justify-center">
-                    <div className="relative mb-0 h-[min(68%,480px)] w-[min(42%,280px)]">
+                    <div className="relative mb-0 h-[min(58%,320px)] w-[min(44%,190px)] sm:h-[min(68%,480px)] sm:w-[min(42%,280px)]">
                       <Image
                         src={selectedSuspect.image}
                         alt=""
@@ -283,14 +283,14 @@ export default function GamePage() {
                   </div>
                   <div
                     className={cn(
-                      "flex h-full min-w-0 flex-1 flex-col gap-2 border-2 border-sky-700 bg-zinc-200 p-3 sm:p-4"
+                      "flex h-full min-w-0 flex-1 flex-col gap-1 border-2 border-sky-700 bg-zinc-200 p-2 sm:gap-2 sm:p-4"
                     )}
                   >
                     <button
                       type="button"
                       aria-label="Back to suspects"
                       onClick={() => setSelectedSuspectId(null)}
-                      className="group flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-200"
+                      className="group flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-sm bg-transparent transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-200 sm:h-10 sm:w-10"
                     >
                       <Image
                         src="/arrow.png"
@@ -316,21 +316,21 @@ export default function GamePage() {
           </div>
         </div>
 
-        <div className="mt-5 flex w-full flex-wrap justify-between gap-4">
+        <div className="mt-5 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-between sm:gap-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-orange-200 hover:bg-orange-300">
+              <Button variant="outline" size="lg" className="w-full min-w-0 bg-orange-200 px-3 py-2 text-xs hover:bg-orange-300 sm:w-auto sm:min-w-[10rem] sm:px-6 sm:py-5 sm:text-sm">
                 Access case file
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-orange-200">
+            <DialogContent className="w-[92vw] max-w-[340px] bg-orange-200 p-3 sm:max-w-md sm:p-6">
               <DialogHeader>
                 <DialogTitle className="">Case file</DialogTitle>
                 <DialogDescription className="sr-only">
                   Case story
                 </DialogDescription>
               </DialogHeader>
-              <p className="retro whitespace-pre-line text-[10px] leading-relaxed">
+              <p className="retro whitespace-pre-line text-[9px] leading-relaxed sm:text-[10px]">
                 {storyText}
               </p>
               <DialogClose asChild>
@@ -343,18 +343,18 @@ export default function GamePage() {
 
           <Dialog open={isTerminalOpen} onOpenChange={setIsTerminalOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-black text-green-400 hover:bg-green-400 hover:text-black">
+              <Button variant="outline" size="lg" className="w-full min-w-0 bg-black px-3 py-2 text-xs text-green-400 hover:bg-green-400 hover:text-black sm:w-auto sm:min-w-[10rem] sm:px-6 sm:py-5 sm:text-sm">
                 Access Database
               </Button>
             </DialogTrigger>
             <DialogContent 
               decorativeFrame={false}
-              className="bg-black text-green-200 font-mono sm:max-w-[900px] w-[95vw] max-w-none max-h-[80vh] overflow-y-auto overflow-x-hidden noir-scrollbar"
+              className="w-[92vw] max-w-[360px] max-h-[80vh] overflow-y-auto overflow-x-hidden bg-black font-mono text-green-200 noir-scrollbar sm:w-[95vw] sm:max-w-[900px]"
             >
               <DialogHeader className="text-center">
                 <DialogTitle>Database</DialogTitle>
               </DialogHeader>
-              <div className="w-full p-4 space-y-4">
+              <div className="w-full space-y-3 p-2 sm:space-y-4 sm:p-4">
               <header>
                 <p className="text-xs text-green-400">Type a number (1-4) and press Enter</p>
               </header>
@@ -393,7 +393,7 @@ export default function GamePage() {
 
           <Dialog open={isSolveDialogOpen} onOpenChange={setIsSolveDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="lg" className="min-w-[10rem] px-6 py-5 text-sm bg-chart-1 hover:bg-red-700">
+              <Button size="lg" className="w-full min-w-0 bg-chart-1 px-3 py-2 text-xs hover:bg-red-700 sm:w-auto sm:min-w-[10rem] sm:px-6 sm:py-5 sm:text-sm">
                 Solve the case
               </Button>
             </DialogTrigger>
@@ -436,7 +436,7 @@ export default function GamePage() {
                   role="dialog"
                   aria-modal="true"
                   className={cn(
-                    "retro w-full max-w-md rounded border-2 px-6 py-5 text-sm leading-relaxed shadow-2xl",
+                    "retro w-full max-w-[92vw] rounded border-2 px-4 py-4 text-xs leading-relaxed shadow-2xl sm:max-w-md sm:px-6 sm:py-5 sm:text-sm",
                     verdict.status === "win"
                       ? "border-emerald-500 bg-emerald-900/90 text-emerald-50"
                       : "border-red-500 bg-red-900/90 text-red-50"

@@ -201,7 +201,7 @@ export function InterrogationChat({
           aria-label="Your message"
           disabled={isResponding || isOutOfActions || !canQuery}
           placeholder={isOutOfActions ? "No actions left - accuse the culprit." : "Type what you want to say…"}
-          className="w-full shrink-0 disabled:opacity-60"
+          className="h-8 w-full shrink-0 text-[9px] placeholder:text-[9px] disabled:opacity-60 sm:h-10 sm:text-[10px] sm:placeholder:text-[10px]"
         />
         {fetchError ? (
           <p className="retro mt-1 px-1 text-[9px] text-destructive">{fetchError}</p>
