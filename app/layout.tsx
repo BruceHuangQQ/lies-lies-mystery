@@ -18,8 +18,18 @@ export const metadata: Metadata = {
     default: "Lies, Lies, Mystery",
     template: "%s · Lies, Lies, Mystery",
   },
-  description:
-    "A web mystery about language, trust, and what you choose to believe.",
+  description: "Can you find the murderer?",
+  openGraph: {
+    title: "Lies, Lies, Mystery",
+    description: "Can you find the murderer?",
+    url: "https://lies-lies-mystery.vercel.app/",
+    images: [
+      {
+        url: "/llm.png",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
